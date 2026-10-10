@@ -17,6 +17,7 @@
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{
   background:var(--bg);color:var(--txt);
@@ -35,7 +36,8 @@ button{font-family:inherit}
 .bar-in{max-width:1320px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
 .badge{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:2px;overflow:hidden}.badge svg{width:100%;height:100%}
-.brand h1{font-size:15px;font-weight:600;letter-spacing:-.3px;white-space:nowrap}
+.brand>div:last-child{min-width:0}
+.brand h1{font-size:15px;font-weight:600;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand p{font-size:11px;color:var(--mut);margin-top:1px}
 .strow{display:flex;align-items:center;gap:10px;min-width:0}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--grn);flex-shrink:0}
@@ -174,6 +176,9 @@ button{font-family:inherit}
   .m-desk{display:none}
   .m-mob{display:grid}
   .brand p{display:none}
+  .brand h1{font-size:14px}
+  .bar-in{gap:8px}
+  .strow{gap:6px;flex-shrink:0}
   #stTxt{max-width:84px}
 }
 @media(prefers-reduced-motion:reduce){.mbg,.mm-live,.tt i,.dot.busy,.spinner{animation:none}}
@@ -353,13 +358,14 @@ function romeDate(d){
   return g('year') + g('month') + g('day');
 }
 
-async function loadEspn(){
+async function loadEspn(dates){
   if (!S.espnOn){ S.espn.clear(); S.espnState = 'off'; return; }
   try{
-    const r = await fetchT(ESPN + '?dates=' + romeDate(new Date()), {}, 10000);
+    const map = new Map();
+    for (const day of dates){
+    const r = await fetchT(ESPN + '?dates=' + day, {}, 10000);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
-    const map = new Map();
     for (const ev of d.events || []){
       const comp = ev.competitions?.[0]; if (!comp) continue;
       const h = comp.competitors?.find(c=>c.homeAway==='home');
@@ -371,6 +377,7 @@ async function loadEspn(){
         state: type.state, completed: !!type.completed, name: type.name || '',
         clock: st.displayClock || '', hg: parseInt(h.score,10), ag: parseInt(a.score,10),
       });
+    }
     }
     S.espn = map; S.espnState = 'ok';
   }catch(e){
@@ -622,12 +629,15 @@ function nextDelay(){
   if (live) return LIVE_EVERY;
   return Math.max(LIVE_EVERY, Math.min(IDLE_EVERY, soon));
 }
-function todayActive(){
-  const now = Date.now();
-  return S.matches.some(m => {
-    const t = new Date(m.utcDate).getTime(), v = view(m);
-    return isToday(new Date(m.utcDate)) && t - now < 15 * MIN && (v.st !== 'ft' || now - t < 4 * 60 * MIN);
-  });
+// giorni (fuso di Roma) con partite iniziate da meno di 4 ore o che iniziano entro 15 minuti
+function espnDates(){
+  const now = Date.now(), days = new Set();
+  for (const m of S.matches){
+    const t = new Date(m.utcDate).getTime(), st = FD_ST[m.status] || 'ns';
+    if (st === 'pst' || st === 'canc') continue;
+    if (t - now < 15 * MIN && now - t < 4 * 60 * MIN) days.add(romeDate(new Date(t)));
+  }
+  return [...days];
 }
 
 async function refresh(force){
@@ -640,7 +650,8 @@ async function refresh(force){
   try{
     if (force || !S.matches.length || Date.now() - S.fullAt > FULL_EVERY) await loadFull();
     else if (S.cur) await loadMatchday(S.cur);
-    if (todayActive()) await loadEspn(); else { S.espn.clear(); S.espnState = S.espnOn ? 'idle' : 'off'; }
+    const days = espnDates();
+    if (days.length) await loadEspn(days); else { S.espn.clear(); S.espnState = S.espnOn ? 'idle' : 'off'; }
     renderAll();
     const live = S.matches.some(m => isLive(view(m)));
     let msg = 'Agg. ' + hhmm(new Date());
