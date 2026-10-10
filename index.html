@@ -147,6 +147,7 @@ button{font-family:inherit}
 .chk input{margin-top:2px;accent-color:var(--gold)}
 .chk small{display:block;color:var(--mut2);font-size:11px}
 .acts{display:flex;justify-content:flex-end;gap:8px}
+.hint{font-size:11px;color:var(--red);min-height:14px}
 
 @media(max-width:600px){
   .dash{padding:14px 12px;gap:12px}
@@ -245,23 +246,24 @@ button{font-family:inherit}
 
 <!-- IMPOSTAZIONI -->
 <div class="ov" id="ov" hidden>
-  <form class="sheet" id="setForm" autocomplete="off">
-    <h2>Collega football-data.org</h2>
+  <div class="sheet" id="setForm" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+    <h2 id="setTitle">Collega football-data.org</h2>
     <p>Serve il token gratuito di football-data.org. Lo trovi nella mail di registrazione o su
       <a href="https://www.football-data.org/client/register" target="_blank" rel="noopener">football-data.org/client/register</a>.
       Resta salvato solo in questo browser.</p>
     <div class="fld">
       <label for="fdKey">Token API</label>
-      <input type="password" id="fdKey" placeholder="es. 1a2b3c4d5e6f…" spellcheck="false">
+      <input type="password" id="fdKey" placeholder="es. 1a2b3c4d5e6f…" spellcheck="false" autocomplete="off">
+      <span class="hint" id="keyHint"></span>
     </div>
     <label class="chk"><input type="checkbox" id="espnOn" checked>
       <span>Punteggi in diretta da ESPN
         <small>Il piano gratuito di football-data.org mostra i risultati in ritardo. ESPN li aggiorna in tempo reale, ma è una fonte non ufficiale.</small></span></label>
     <div class="acts">
       <button type="button" class="gbtn" id="setCancel">Annulla</button>
-      <button type="submit" class="gbtn pri">Salva</button>
+      <button type="button" class="gbtn pri" id="setSave">Salva</button>
     </div>
-  </form>
+  </div>
 </div>
 
 <script>
@@ -325,11 +327,17 @@ function clubId(...names){
 const fdTeamId = t => clubId(t?.name, t?.shortName);
 
 /* ── RETE ── */
+function fetchT(url, opts = {}, ms = 15000){
+  const c = new AbortController();
+  const t = setTimeout(() => c.abort(), ms);
+  return fetch(url, { ...opts, signal: c.signal }).finally(() => clearTimeout(t));
+}
 async function fdFetch(path){
   let r;
   try{
-    r = await fetch(FD + path, { headers: { 'X-Auth-Token': S.token } });
+    r = await fetchT(FD + path, { headers: { 'X-Auth-Token': S.token } });
   }catch(e){
+    if (e.name === 'AbortError') throw new Error('football-data.org non ha risposto entro 15 secondi. Riprova tra poco.');
     throw new Error('football-data.org non raggiungibile. Controlla la connessione; se persiste, il browser sta bloccando la richiesta.');
   }
   if (r.status === 400 || r.status === 403) throw new Error('Token non valido o non abilitato alla Serie A. Controllalo nelle impostazioni.');
@@ -348,7 +356,7 @@ function romeDate(d){
 async function loadEspn(){
   if (!S.espnOn){ S.espn.clear(); S.espnState = 'off'; return; }
   try{
-    const r = await fetch(ESPN + '?dates=' + romeDate(new Date()));
+    const r = await fetchT(ESPN + '?dates=' + romeDate(new Date()), {}, 10000);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
     const map = new Map();
@@ -625,7 +633,7 @@ function todayActive(){
 async function refresh(force){
   if (S.timer){ clearTimeout(S.timer); S.timer = null; }
   if (!S.token){ askToken(); return; }
-  if (S.busy) return;
+  if (S.busy){ S.again = S.again || !!force; S.queued = true; return; }
   S.busy = true;
   setStatus('busy', 'Aggiornamento…');
   if (!S.matches.length) showSpinners();
@@ -651,11 +659,13 @@ async function refresh(force){
     S.timer = setTimeout(() => refresh(false), 2 * MIN);
   }finally{
     S.busy = false;
+    if (S.queued){ const f = S.again; S.queued = false; S.again = false; refresh(f); }
   }
 }
 
 /* ── IMPOSTAZIONI ── */
 function openSettings(){
+  $('keyHint').textContent = '';
   $('fdKey').value = S.token; $('espnOn').checked = S.espnOn;
   $('ov').hidden = false; setTimeout(() => $('fdKey').focus(), 30);
 }
@@ -664,16 +674,21 @@ $('setBtn').addEventListener('click', openSettings);
 $('setCancel').addEventListener('click', closeSettings);
 $('ov').addEventListener('click', e => { if (e.target === $('ov')) closeSettings(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('ov').hidden) closeSettings(); });
-$('setForm').addEventListener('submit', e => {
-  e.preventDefault();
+function saveSettings(){
   const t = $('fdKey').value.trim();
+  if (!t){ $('keyHint').textContent = 'Incolla il token prima di salvare.'; $('fdKey').focus(); return; }
   const changed = t !== S.token;
   S.token = t; S.espnOn = $('espnOn').checked;
   lsSet(LS_TOKEN, t); lsSet(LS_ESPN, S.espnOn ? '1' : '0');
   closeSettings();
   if (changed){ S.matches = []; S.official.clear(); S.view = null; }
+  setStatus('busy', 'Collegamento a football-data.org…');
+  showSpinners();
   refresh(true);
-});
+}
+$('setSave').addEventListener('click', saveSettings);
+$('fdKey').addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); saveSettings(); } });
+$('fdKey').addEventListener('input', () => { $('keyHint').textContent = ''; });
 $('refBtn').addEventListener('click', () => refresh(true));
 $('prevMd').addEventListener('click', () => { if (S.view > 1){ S.view--; renderMatchdays(); } });
 $('nextMd').addEventListener('click', () => { S.view++; renderMatchdays(); });
