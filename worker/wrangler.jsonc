@@ -1,0 +1,15 @@
+// Configurazione del Worker per il deploy automatico da GitHub (Cloudflare Workers Builds).
+// Nelle impostazioni di build su Cloudflare imposta "Root directory" = worker
+// Il token NON va qui: aggiungilo su Cloudflare come Secret chiamato FD_TOKEN.
+{
+  "$schema": "https://unpkg.com/wrangler@4/config-schema.json",
+  // deve coincidere con il nome del Worker su Cloudflare
+  "name": "serie-a",
+  "main": "football-data-proxy.js",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  "vars": {
+    // siti autorizzati a usare il Worker, separati da virgola
+    "ALLOWED_ORIGINS": "https://fpuzzilli.github.io"
+  }
+}
