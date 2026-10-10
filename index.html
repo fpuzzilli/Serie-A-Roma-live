@@ -74,7 +74,7 @@ img{display:block}
 .rows{flex:1;min-height:0;display:flex;flex-direction:column}
 
 /* intestazioni pannello */
-.ttl{flex:0 0 var(--row);display:flex;align-items:center;justify-content:space-between;gap:.6em;padding:0 .75em;min-width:0}
+.ttl{flex:0 0 var(--row);height:var(--row);display:flex;align-items:center;justify-content:space-between;gap:.6em;padding:0 .75em;min-width:0}
 .ttl h2{font-size:1.04em;font-weight:600;letter-spacing:-.01em;white-space:nowrap;display:flex;align-items:center;gap:.5em}
 .ttl .meta{display:flex;align-items:center;gap:.4em;color:var(--dim);font-size:.82em;white-space:nowrap;min-width:0}
 .nav{display:flex;gap:.25em}
@@ -84,9 +84,9 @@ img{display:block}
 
 /* ── CLASSIFICA ──
    ordine celle: pos | stemma | squadra | Pt | G | V | N | P | GF | GS | DR | forma */
-.st{flex:0 0 var(--row);display:grid;align-items:center;column-gap:.55em;padding:0 .75em;border-top:1px solid var(--line);
+.st{flex:0 0 var(--row);height:var(--row);display:grid;grid-template-rows:minmax(0,1fr);align-items:center;align-content:center;column-gap:.55em;padding:0 .75em;border-top:1px solid var(--line);
     grid-template-columns:1.75em minmax(0,1fr) 2.1em}
-.st > *{min-width:0}
+.st > *{min-width:0;align-self:center}
 .st .cr,.st .g,.st .v,.st .n,.st .p,.st .gf,.st .gs,.st .dr,.st .fm{display:none}
 .st.hd{border-top:0;color:var(--mut);font-weight:500}
 .st.hd > *{font-size:.74em}
@@ -116,9 +116,9 @@ img{display:block}
 
 /* ── PARTITE ──
    ordine celle: casa | stemma | centro (risultato o orario) | stemma | ospite | info */
-.mt{flex:0 0 var(--row);display:grid;align-items:center;column-gap:.5em;padding:0 .75em;border-top:1px solid var(--line);
+.mt{flex:0 0 var(--row);height:var(--row);display:grid;grid-template-rows:minmax(0,1fr);align-items:center;align-content:center;column-gap:.5em;padding:0 .75em;border-top:1px solid var(--line);
     grid-template-columns:minmax(0,1fr) 3.3em minmax(0,1fr)}
-.mt > *{min-width:0}
+.mt > *{min-width:0;align-self:center}
 .mt .cr,.mt .me{display:none}
 .mt.nd{border-top-color:var(--line2)}
 .hm,.aw{font-weight:450;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
