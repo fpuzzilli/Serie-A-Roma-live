@@ -253,12 +253,11 @@ button{font-family:inherit}
 <div class="ov" id="ov" hidden>
   <div class="sheet" id="setForm" role="dialog" aria-modal="true" aria-labelledby="setTitle">
     <h2 id="setTitle">Collega football-data.org</h2>
-    <p>Serve il token gratuito di football-data.org. Lo trovi nella mail di registrazione o su
-      <a href="https://www.football-data.org/client/register" target="_blank" rel="noopener">football-data.org/client/register</a>.
-      Resta salvato solo in questo browser.</p>
+    <p>football-data.org non accetta richieste dirette dal browser, quindi la pagina passa da un intermediario su Cloudflare
+      che custodisce il token. Incolla qui l'indirizzo del tuo Worker: il token non va inserito nella pagina.</p>
     <div class="fld">
-      <label for="fdKey">Token API</label>
-      <input type="password" id="fdKey" placeholder="es. 1a2b3c4d5e6f…" spellcheck="false" autocomplete="off">
+      <label for="fdKey">Indirizzo del Worker</label>
+      <input type="url" id="fdKey" placeholder="https://serie-a.tuonome.workers.dev" spellcheck="false" autocomplete="off" inputmode="url">
       <span class="hint" id="keyHint"></span>
     </div>
     <label class="chk"><input type="checkbox" id="espnOn" checked>
@@ -277,12 +276,17 @@ button{font-family:inherit}
    - football-data.org (token gratuito, 10 richieste/minuto): calendario,
      giornate, risultati, classifica ufficiale (per le penalizzazioni)
    - ESPN scoreboard (senza chiave, non ufficiale): punteggi in diretta
-   Il token non è nel codice: lo inserisci dal pulsante con la chiave.
+   football-data.org blocca le chiamate dirette dal browser: la pagina passa
+   dall'intermediario su Cloudflare (worker/football-data-proxy.js), che
+   custodisce il token. Qui serve solo l'indirizzo del Worker, che non è segreto.
    ══════════════════════════════════════════════════════════════════════ */
-const FD   = 'https://api.football-data.org/v4';
+// Indirizzo del Worker Cloudflare. Compilalo per farlo valere su tutti i dispositivi,
+// oppure lascialo vuoto e inseriscilo dal pulsante con la chiave.
+const PROXY_DEFAULT = '';
 const COMP = 'SA';
 const ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/scoreboard';
-const LS_TOKEN = 'sa_fd_token', LS_ESPN = 'sa_espn_live';
+const LS_PROXY = 'sa_fd_proxy', LS_ESPN = 'sa_espn_live';
+try{ localStorage.removeItem('sa_fd_token'); }catch(e){}   // il token non si salva più nel browser
 
 const MIN = 60_000;
 const FULL_EVERY = 10 * MIN;   // ricarica stagione completa + classifica ufficiale
@@ -295,7 +299,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 const S = {
-  token: lsGet(LS_TOKEN) || '',
+  proxy: lsGet(LS_PROXY) || PROXY_DEFAULT,
   espnOn: lsGet(LS_ESPN) !== '0',
   matches: [],          // tutte le partite della stagione (football-data)
   official: new Map(),  // id squadra → riga classifica ufficiale
@@ -340,12 +344,16 @@ function fetchT(url, opts = {}, ms = 15000){
 async function fdFetch(path){
   let r;
   try{
-    r = await fetchT(FD + path, { headers: { 'X-Auth-Token': S.token } });
+    r = await fetchT(S.proxy.replace(/\/+$/,'') + '/v4' + path);
   }catch(e){
     if (e.name === 'AbortError') throw new Error('football-data.org non ha risposto entro 15 secondi. Riprova tra poco.');
-    throw new Error('football-data.org non raggiungibile. Controlla la connessione; se persiste, il browser sta bloccando la richiesta.');
+    throw new Error('Worker non raggiungibile. Controlla l\'indirizzo nelle impostazioni e la connessione.');
   }
-  if (r.status === 400 || r.status === 403) throw new Error('Token non valido o non abilitato alla Serie A. Controllalo nelle impostazioni.');
+  if (r.status === 403 || r.status === 500 || r.status === 404){
+    const b = await r.json().catch(() => ({}));
+    if (b.message && /Sito non autorizzato|FD_TOKEN|Percorso/.test(b.message)) throw new Error('Worker: ' + b.message + '.');
+  }
+  if (r.status === 400 || r.status === 403) throw new Error('football-data.org rifiuta il token salvato nel Worker. Controlla il secret FD_TOKEN.');
   if (r.status === 429) throw new Error('Limite di richieste raggiunto su football-data.org. Riprovo tra un minuto.');
   if (!r.ok) throw new Error('football-data.org ha risposto con errore ' + r.status + '.');
   return r.json();
@@ -610,8 +618,8 @@ function setStatus(s, msg){ $('dot').className = 'dot ' + s; $('stTxt').textCont
 function showMsg(html){ ['tbl','curCard','nxtCard'].forEach(id => $(id).innerHTML = `<div class="msg">${html}</div>`); }
 function showSpinners(){ ['tbl','curCard','nxtCard'].forEach(id => $(id).innerHTML = '<div class="spin-state"><div class="spinner"></div></div>'); }
 function askToken(){
-  setStatus('err', 'Token mancante');
-  showMsg('<p>Inserisci il token gratuito di football-data.org per caricare classifica e partite.</p><button class="gbtn pri" type="button" onclick="openSettings()">Inserisci token</button>');
+  setStatus('err', 'Worker da configurare');
+  showMsg('<p>Inserisci l\'indirizzo del tuo Worker Cloudflare per caricare classifica e partite.</p><button class="gbtn pri" type="button" onclick="openSettings()">Inserisci indirizzo</button>');
   $('stdSide').textContent = ''; $('curSide').textContent = ''; $('nxtSide').textContent = '';
 }
 
@@ -642,7 +650,7 @@ function espnDates(){
 
 async function refresh(force){
   if (S.timer){ clearTimeout(S.timer); S.timer = null; }
-  if (!S.token){ askToken(); return; }
+  if (!S.proxy){ askToken(); return; }
   if (S.busy){ S.again = S.again || !!force; S.queued = true; return; }
   S.busy = true;
   setStatus('busy', 'Aggiornamento…');
@@ -677,7 +685,7 @@ async function refresh(force){
 /* ── IMPOSTAZIONI ── */
 function openSettings(){
   $('keyHint').textContent = '';
-  $('fdKey').value = S.token; $('espnOn').checked = S.espnOn;
+  $('fdKey').value = S.proxy; $('espnOn').checked = S.espnOn;
   $('ov').hidden = false; setTimeout(() => $('fdKey').focus(), 30);
 }
 function closeSettings(){ $('ov').hidden = true; }
@@ -686,11 +694,12 @@ $('setCancel').addEventListener('click', closeSettings);
 $('ov').addEventListener('click', e => { if (e.target === $('ov')) closeSettings(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('ov').hidden) closeSettings(); });
 function saveSettings(){
-  const t = $('fdKey').value.trim();
-  if (!t){ $('keyHint').textContent = 'Incolla il token prima di salvare.'; $('fdKey').focus(); return; }
-  const changed = t !== S.token;
-  S.token = t; S.espnOn = $('espnOn').checked;
-  lsSet(LS_TOKEN, t); lsSet(LS_ESPN, S.espnOn ? '1' : '0');
+  let t = $('fdKey').value.trim().replace(/\/+$/,'');
+  if (t && !/^https?:\/\//i.test(t)) t = 'https://' + t;
+  if (!/^https:\/\/[^\s/]+\.[^\s/]+/i.test(t)){ $('keyHint').textContent = 'Incolla l\'indirizzo completo del Worker, per esempio https://serie-a.tuonome.workers.dev'; $('fdKey').focus(); return; }
+  const changed = t !== S.proxy;
+  S.proxy = t; S.espnOn = $('espnOn').checked;
+  lsSet(LS_PROXY, t); lsSet(LS_ESPN, S.espnOn ? '1' : '0');
   closeSettings();
   if (changed){ S.matches = []; S.official.clear(); S.view = null; }
   setStatus('busy', 'Collegamento a football-data.org…');
@@ -704,7 +713,7 @@ $('refBtn').addEventListener('click', () => refresh(true));
 $('prevMd').addEventListener('click', () => { if (S.view > 1){ S.view--; renderMatchdays(); } });
 $('nextMd').addEventListener('click', () => { S.view++; renderMatchdays(); });
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden && S.token && Date.now() - S.fullAt > LIVE_EVERY) refresh(false);
+  if (!document.hidden && S.proxy && Date.now() - S.fullAt > LIVE_EVERY) refresh(false);
 });
 
 refresh(true);
