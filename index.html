@@ -177,6 +177,7 @@ img{display:block}
 .ko{display:flex;flex-direction:column;align-items:center;line-height:1.05;color:var(--dim)}
 .ko .kt{font-size:.82em}
 .ko .kd{font-size:.72em;color:var(--mut);margin-bottom:.3em}
+.mt:not(.day1) .ko .kd{display:none}
 .ko.off{color:#FF6B6B;font-size:.78em}
 .me{text-align:right;color:var(--mut);font-size:.8em;white-space:nowrap}
 .mt.live{background:var(--now-bg);box-shadow:inset var(--bar) 0 var(--now)}
@@ -250,6 +251,8 @@ img{display:block}
   /* posizioni: numeri più piccoli, colonna più stretta */
   .st{grid-template-columns:1.15em minmax(0,1fr) 1.7em 2em;column-gap:.5em}
   .pos{font-size:.74em}
+  .ko{line-height:.98}
+  .ko .kd{margin-bottom:.22em}
   .status .lg{display:none}
   .panel{--ip:.8em}
 }
@@ -667,7 +670,7 @@ function matchRow(m, newDay){
   const info = live ? (v.st === 'ht' ? 'Intervallo' : esc(v.min || 'Live')) : newDay ? day : '';
 
   const roma = isRoma(hid) || isRoma(aid);
-  const cls = ['mt', live && 'live', roma && 'roma'].filter(Boolean).join(' ');
+  const cls = ['mt', live && 'live', roma && 'roma', newDay && 'day1'].filter(Boolean).join(' ');
   return `<div class="${cls}">
     ${tn(dispName(m.homeTeam), tla(m.homeTeam), 'hm')}
     ${crest(m.homeTeam?.crest, hid, roma)}<span class="ce">${center}</span>${crest(m.awayTeam?.crest, aid, roma)}
@@ -730,7 +733,8 @@ function layout(){
   // riga di riferimento: classifica = testata + 20 righe, partite = testata + 10 righe
   const row = Math.min((T.h - PAD) / 21, (M.h - PAD) / 11);
   // larghezze minime (in em) con le sigle: classifica ≈ 11.5em (pos, sigla, Pt, G), partite ≈ 12.2em
-  const fs = Math.max(9, Math.min(13.5, row * .43, T.w / 11.5, M.w / 12.2));
+  const ratio = window.innerWidth <= 480 ? .5 : .43;   // su telefono le righe hanno margine: testo più grande
+  const fs = Math.max(9, Math.min(13.5, row * ratio, T.w / 11.5, M.w / 12.2));
   dash.style.setProperty('--fs', fs.toFixed(2) + 'px');
   dash.style.setProperty('--th', row.toFixed(2) + 'px');
   for (const p of Object.values(panels)) p.style.setProperty('--ph', (p.getBoundingClientRect().height - 2 - PAD) + 'px');
