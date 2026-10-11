@@ -19,9 +19,9 @@
   --line:rgba(255,255,255,.06); --line2:rgba(255,255,255,.14);
   --txt:#EAEAEC; --dim:#A2A2A8; --mut:#66666D;
   --live:#3DDC84; --live-bg:rgba(61,220,132,.12);          /* etichette Live */
-  --now:#FFFFFF; --now-bg:rgba(255,255,255,.075);           /* righe delle partite in corso */
+  --now:#FFB020; --now-bg:rgba(255,176,32,.11);            /* righe delle partite in corso: arancio */
   --prov:#FFB020; --prov-bg:rgba(255,176,32,.12);           /* classifica provvisoria */
-  --roma:#C8102E; --roma-bg:rgba(255,212,0,.13); --gold:#FD9504;
+  --roma:#C8102E; --roma-bg:rgba(255,255,255,.085);   /* righe della Roma: bianco, barra rossa */ --gold:#FD9504;
   --err:#FF6B6B;
   --ucl:#3DB4FF; --uel:#FF9A2E; --uecl:#2BF59A; --rel:#C77DFF;
   --bar:1px;
@@ -178,6 +178,7 @@ img{display:block}
 .me{text-align:right;color:var(--mut);font-size:.8em;white-space:nowrap}
 .mt.live{background:var(--now-bg);box-shadow:inset var(--bar) 0 var(--now)}
 .mt.live .me{color:var(--now)}
+.mt.roma.live .me{color:var(--now)}
 .mt.live .sc{color:var(--prov);font-weight:600;animation:blink 1.4s ease infinite}
 .mt.roma{background:var(--roma-bg);box-shadow:inset var(--bar) 0 var(--roma)}
 .mt.roma .tn,.mt.roma .sc{color:#fff;font-weight:600}
