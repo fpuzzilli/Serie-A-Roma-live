@@ -17,10 +17,10 @@
   --line:rgba(255,255,255,.055); --line2:rgba(255,255,255,.14);
   --txt:#E8ECF4; --dim:#A1AABB; --mut:#5F687C;
   --live:#FFB020; --live-bg:rgba(255,176,32,.10);
-  --roma-bg:rgba(142,31,47,.34); --gold:#F0BC42;
+  --roma-bg:rgba(142,31,47,.34); --roma:#B8203B; --gold:#F0BC42;
   --ucl:#3D6FF5; --uel:#F57C1F; --uecl:#1FBF6A; --rel:#E5484D;
   --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --hdr:clamp(40px,5.6vh,54px);
+  --hdr:clamp(48px,6.4vh,62px);
   --pad:clamp(10px,1.7vw,28px);
   --gap:clamp(8px,1.25vw,20px);
   --radius:clamp(8px,.8vw,14px);
@@ -45,13 +45,13 @@ img{display:block}
 .top{height:var(--hdr);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 var(--pad);font-size:calc(var(--hdr)*.32)}
 .brand{display:flex;align-items:center;gap:.6em;min-width:0}
 .brand svg{height:calc(var(--hdr)*.58);width:auto;flex-shrink:0}
-.brand h1{font-size:1.15em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1}
-.brand h1 span{color:var(--mut);font-weight:400;margin-left:.35em}
+.brand h1{font-size:1.15em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1;position:relative;top:-.08em}
+.brand h1 span{color:var(--mut);font-weight:400;margin-left:.45em;font-size:.72em}
 .status{display:flex;align-items:center;gap:.55em;flex-shrink:0;line-height:1}
 .dot{width:.5em;height:.5em;border-radius:50%;background:#1FBF6A;flex-shrink:0}
 .dot.busy{background:var(--live);animation:blink 1s ease infinite}
 .dot.err{background:var(--rel)}
-#stTxt{color:var(--dim);white-space:nowrap}
+#stTxt{color:var(--dim);white-space:nowrap;font-size:.8em}
 .pill{display:inline-flex;align-items:center;gap:.4em;font-size:.78em;font-weight:600;padding:.3em .6em;border-radius:99px;white-space:nowrap;line-height:1}
 .pill.live{background:var(--live-bg);color:var(--live)}
 .pill.live::before{content:"";width:.5em;height:.5em;border-radius:50%;background:currentColor;animation:blink 1.4s ease infinite}
@@ -70,15 +70,15 @@ img{display:block}
   font-size:var(--fs);line-height:1.2;
 }
 .panel{background:var(--panel);border:1px solid var(--edge);border-radius:var(--radius);overflow:hidden;min-width:0;min-height:0;
-  display:flex;flex-direction:column;padding:.35em 0}
-.p-table{grid-row:1 / 3;--n:22}
-.p-match{--n:11}
+  display:flex;flex-direction:column;padding:4px 0}
+.p-table{grid-row:1 / 3;--n:20}
+.p-match{--n:10}
 .rows{flex:1;min-height:0;display:flex;flex-direction:column}
-/* ogni riga è alta 1/n del pannello: altezza esplicita perché Safari centri il contenuto */
-.ttl,.st,.mt{--row:calc((var(--ph,0px)) / var(--n));flex:0 0 var(--row);height:var(--row);min-height:0}
+/* testata alta --th in tutti i pannelli; le righe si dividono il resto (altezza esplicita perché Safari centri il contenuto) */
+.st,.mt{--row:calc((var(--ph,0px) - var(--th,0px)) / var(--n));flex:0 0 var(--row);height:var(--row);min-height:0}
 
 /* ── TITOLI (stessa dimensione nei tre pannelli) ── */
-.ttl{display:flex;align-items:center;justify-content:space-between;gap:.7em;padding:0 var(--ip);min-width:0}
+.ttl{flex:0 0 var(--th);height:var(--th);min-height:0;display:flex;align-items:center;justify-content:space-between;gap:.7em;padding:0 var(--ip);min-width:0;border-bottom:1px solid var(--line)}
 .ttl h2{font-size:1.08em;font-weight:600;letter-spacing:-.012em;white-space:nowrap;display:flex;align-items:center;gap:.55em;min-width:0;overflow:hidden}
 .ttl h2 > span:first-child{overflow:hidden;text-overflow:ellipsis}
 .ttl .meta{display:flex;align-items:center;gap:.5em;color:var(--dim);font-size:.82em;white-space:nowrap;min-width:0}
@@ -97,39 +97,42 @@ img{display:block}
 .tn .s{display:none}
 .dash.short .tn .f{display:none}
 .dash.short .tn .s{display:inline}
+.dash.short .ld{display:none}   /* con le sigle il live è segnalato dai punti in ambra */
 
 /* ── CLASSIFICA ──
    celle: pos | stemma | squadra | Pt | G | V | N | P | GF | GS | DR | ultime 5 */
 .st{display:grid;grid-template-rows:minmax(0,1fr);align-items:center;column-gap:.6em;padding:0 var(--ip);border-top:1px solid var(--line);
-    grid-template-columns:1.6em minmax(0,1fr) 2em}
+    grid-template-columns:1.6em minmax(0,1fr) 2em 1.7em}
 .st > *{min-width:0;align-self:center}
-.st .cr,.st .g,.st .v,.st .n,.st .p,.st .gf,.st .gs,.st .dr,.st .fm{display:none}
-.st.hd{border-top:0;color:var(--mut);font-weight:500}
-.st.hd > *{font-size:.76em}
-.st.hd > *:not(.nm){text-align:right}
-.st.hd .pos{text-align:center}
-.pos{text-align:center;font-weight:500;font-size:.88em;color:var(--mut)}
+.st .cr,.st .v,.st .n,.st .p,.st .gf,.st .gs,.st .dr,.st .fm{display:none}
+.rows > .st:first-child,.rows > .mt:first-child{border-top-color:transparent}
+.pos{text-align:center;font-weight:500;font-size:.86em;color:var(--mut)}
 .st.ucl{--z:var(--ucl)} .st.uel{--z:var(--uel)} .st.uecl{--z:var(--uecl)} .st.rel{--z:var(--rel)}
 .st.ucl,.st.uel,.st.uecl,.st.rel{box-shadow:inset 3px 0 var(--z)}
-.st.ucl .pos,.st.uel .pos,.st.uecl .pos,.st.rel .pos{color:var(--z)}
-.st.cut{border-bottom:1px solid var(--line2)}
-.st.cut + .st{border-top-color:transparent}
+/* riga del titolo della classifica: stessa griglia delle righe, titolo sopra posizione/stemma/squadra */
+.st.th{display:grid;border-top:0;justify-content:stretch}
+.st.th h2{grid-column:1 / 3}
+.p-table[data-l~="2"] .st.th h2{grid-column:1 / 4}
+.st.th > span{font-size:.74em;color:var(--mut);font-weight:500;text-align:right}
+.st.th .pt{font-weight:500}
+.panel[data-narrow] .st.th h2{grid-column:1 / -1}
+.panel[data-narrow] .st.th > span{display:none}
 .nm{display:flex;align-items:center;gap:.45em;min-width:0}
 .ld{width:.42em;height:.42em;border-radius:50%;background:var(--live);flex-shrink:0;animation:blink 1.4s ease infinite}
-.pt{text-align:right;font-weight:600}
+.pt{text-align:right;font-weight:600;font-size:1.02em}
 .st.lv .pt{color:var(--live)}
-.g,.v,.n,.p,.gf,.gs,.dr{text-align:right;color:var(--dim)}
+.g,.v,.n,.p,.gf,.gs,.dr{text-align:right;color:var(--dim);font-size:.86em}
 .cr{width:1.3em;height:1.3em}
 .cr img{width:100%;height:100%;object-fit:contain}
+.cr.inv img{filter:invert(1) brightness(.92)}
 .fm{display:flex;gap:.22em;justify-content:flex-end}
-.fm i{font-style:normal;width:1.45em;height:1.45em;border-radius:.25em;display:grid;place-items:center;font-size:.68em;font-weight:500;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.5)}
+.fm i{font-style:normal;width:1.5em;height:1.5em;border-radius:.25em;display:grid;place-items:center;font-size:.66em;font-weight:500;color:var(--dim);border:1px solid currentColor}
 .st.roma{background:var(--roma-bg)}
 .st.roma .tn{color:#fff;font-weight:550}
 
-.p-table[data-l~="1"] .st{grid-template-columns:1.6em minmax(0,1fr) 2em 1.7em}
-.p-table[data-l~="1"] .st .g{display:block}
 .p-table[data-l~="2"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.1em 1.7em 2.3em}
 .p-table[data-l~="2"] .st .cr,.p-table[data-l~="2"] .st .dr{display:block}
+.p-table[data-l~="2"] .st.th .cr{display:none}
 .p-table[data-l~="3"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.1em repeat(4,1.7em) 2.3em}
 .p-table[data-l~="3"] .st .v,.p-table[data-l~="3"] .st .n,.p-table[data-l~="3"] .st .p{display:block}
 .p-table[data-l~="4"] .st{grid-template-columns:1.7em 1.35em minmax(0,1fr) 2.2em repeat(4,1.7em) 1.9em 1.9em 2.4em 7em;column-gap:.7em}
@@ -142,18 +145,19 @@ img{display:block}
     grid-template-columns:minmax(0,1fr) 3.3em minmax(0,1fr)}
 .mt > *{min-width:0;align-self:center}
 .mt .cr,.mt .me{display:none}
-.mt.nd{border-top-color:var(--line2)}
 .mt .hm{text-align:right}
 .ce{text-align:center;white-space:nowrap}
 .sc{font-weight:600;letter-spacing:.01em}
 .sc i{font-style:normal;color:var(--mut);margin:0 .14em;font-weight:400}
 .ko{display:flex;flex-direction:column;align-items:center;line-height:1.05;color:var(--dim)}
+.ko .kt{font-size:.9em}
 .ko .kd{font-size:.72em;color:var(--mut)}
 .ko.off{color:var(--rel);font-size:.78em}
 .me{text-align:right;color:var(--mut);font-size:.8em;white-space:nowrap}
 .mt.live{background:var(--live-bg);box-shadow:inset 3px 0 var(--live)}
 .mt.live .sc,.mt.live .me{color:var(--live)}
-.mt.roma{background:var(--roma-bg)}
+.mt.roma{box-shadow:inset 3px 0 var(--roma)}
+.mt.roma.live{background:var(--live-bg)}
 .mt.roma .tn{color:#fff;font-weight:550}
 .mt.empty{visibility:hidden}
 
@@ -223,7 +227,7 @@ img{display:block}
 <header class="top">
   <div class="brand">
     <svg viewBox="0 0 642.858 637.143" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#fd9504" d="M305.493-34.205C240.9 1.45 193.598 47.583 191.566 121.153l-128.573-87.5c-23.684 22.836-97.6 157.312-15.712 245l-67.858 38.57 66.428 53.572-76.428 56.428 87.858 23.572-136.43 152.143 212.142-48.572.715 47.142 98.573-46.427-.715 47.142 45.715-37.142 23.57-2.143c33.409 17.738 64.241 42.994 110 37.143 48.909-6.254 59.982-36.676 77.142-62.858l-63.57-.715-48.572 28.573-4.285-29.286-29.287-1.43-7.856-27.857h-25.715l-2.857-17.855c-26.884 2.237-35.787-16.504-40-40.715 72.918-6.706 160.582 35.037 207.142 53.57l90.715-61.427-103.572-117.858-.713-125.713-86.43-66.43Zm-2.189 318.852c30.041-.34 61.074 12.81 78.975 47.576-6.132 6.912-81.123 49.471-143.57-23.57 15.494-14.182 39.704-23.725 64.595-24.006z" transform="translate(79.15 34.205)"/></svg>
-    <h1>Serie A<span>2026/27</span></h1>
+    <h1>Serie A<span>2026/2027</span></h1>
   </div>
   <div class="status">
     <span id="livePill" hidden></span>
@@ -236,11 +240,10 @@ img{display:block}
 
 <main class="dash" id="dash">
   <section class="panel p-table" id="tblPanel" aria-labelledby="tblTitle">
-    <div class="ttl"><h2><span id="tblTitle">Classifica</span> <span id="tblPill"></span></h2></div>
-    <div class="st hd" aria-hidden="true">
-      <span class="pos">#</span><span class="cr"></span><span class="nm">Squadra</span><span class="pt">Pt</span>
-      <span class="g">G</span><span class="v">V</span><span class="n">N</span><span class="p">P</span>
-      <span class="gf">GF</span><span class="gs">GS</span><span class="dr">DR</span><span class="fm">Ultime 5</span>
+    <div class="ttl st th">
+      <h2><span id="tblTitle">Classifica</span> <span id="tblPill"></span></h2>
+      <span class="pt" title="Punti">Pt</span><span class="g" title="Giocate">G</span><span class="v" title="Vinte">V</span><span class="n" title="Pareggiate">N</span><span class="p" title="Perse">P</span>
+      <span class="gf" title="Gol fatti">GF</span><span class="gs" title="Gol subiti">GS</span><span class="dr" title="Differenza reti">DR</span><span class="fm">Ultime 5</span>
     </div>
     <div class="rows" id="tbl"></div>
   </section>
@@ -479,7 +482,7 @@ function computeTable(){
     let r = rows.get(id);
     if (!r){
       const o = S.official.get(id), team = t || o?.team || {};
-      r = { id, name: team.shortName || team.name || id, tla: team.tla || '', crest: team.crest || o?.team?.crest || '',
+      r = { id, name: dispName(team), tla: tla(team), crest: team.crest || o?.team?.crest || '',
             p:0, w:0, d:0, l:0, gf:0, ga:0, form: [],
             adj: o ? o.points - (o.won * 3 + o.draw) : 0 };   // penalizzazioni ufficiali
       rows.set(id, r);
@@ -561,10 +564,18 @@ function currentMatchday(g){
 /* ══════════════════════════════════════════════════════════════════════
    DISEGNO
    ══════════════════════════════════════════════════════════════════════ */
-const crest = url => `<span class="cr">${url ? `<img src="${esc(url)}" alt="" loading="lazy" decoding="async">` : ''}</span>`;
+const DARK_CREST = new Set(['JUV']);   // stemmi neri, invisibili sul fondo scuro
+const crest = (url, id) => `<span class="cr${DARK_CREST.has(id) ? ' inv' : ''}">${url ? `<img src="${esc(url)}" alt="" loading="lazy" decoding="async">` : ''}</span>`;
 // ogni nome è scritto in entrambe le forme: la pagina mostra la stessa ovunque
 const tn = (full, short, cls = '') => `<span class="tn ${cls}"><span class="f">${esc(full)}</span><span class="s">${esc(short)}</span></span>`;
-const tla = t => t?.tla || (t?.shortName || t?.name || '???').slice(0, 3).toUpperCase();
+// nomi come li vuoi vedere: niente "1907", "FC" e simili
+const NAME = { COM:'Como', VEN:'Venezia', INT:'Inter', MIL:'Milan', ROM:'Roma', LAZ:'Lazio', JUV:'Juventus', NAP:'Napoli' };
+const dispName = t => NAME[teamId(t)] || String(t?.shortName || t?.name || '?')
+  .replace(/\b(FC|AC|AS|SS|SSC|US|ACF|CFC|BC|Calcio)\b/g, '').replace(/\b(18|19|20)\d\d\b/g, '').replace(/\s+/g, ' ').trim();
+const tla = t => {
+  const id = teamId(t);
+  return /^[A-Z]{3}$/.test(id) ? id : (t?.tla || dispName(t).slice(0, 3).toUpperCase());
+};
 
 function zone(rank, n){
   if (rank <= 4) return 'ucl';
@@ -589,9 +600,9 @@ function renderTable(){
   if (!n){ $('tbl').innerHTML = '<div class="msg"><p>Classifica non ancora disponibile.</p></div>'; return; }
   $('tbl').innerHTML = rows.map(r => {
     const cls = ['st', zone(r.rank, n), isRoma(r.id) && 'roma', live.has(r.id) && 'lv',
-                 (r.rank === 4 || r.rank === 6 || r.rank === n - 3) && 'cut'].filter(Boolean).join(' ');
+                 ].filter(Boolean).join(' ');
     return `<div class="${cls}">
-      <span class="pos">${r.rank}</span>${crest(r.crest)}
+      <span class="pos">${r.rank}</span>${crest(r.crest, r.id)}
       <span class="nm">${live.has(r.id) ? '<i class="ld" title="In campo ora"></i>' : ''}${tn(r.name, r.tla || r.name)}</span>
       <span class="pt"${r.adj ? ` title="Include ${r.adj} punti di penalizzazione o bonus"` : ''}>${r.pts}</span>
       <span class="g">${r.p}</span><span class="v">${r.w}</span><span class="n">${r.d}</span><span class="p">${r.l}</span>
@@ -608,19 +619,18 @@ function matchRow(m, newDay){
   const d = new Date(m.utcDate);
   const day = isToday(d) ? 'oggi' : `${DAYS[d.getDay()]} ${d.getDate()}`;
   const hid = teamId(m.homeTeam), aid = teamId(m.awayTeam);
-  const name = t => t?.shortName || t?.name || '?';
 
   const center = hasScore(v)
     ? `<span class="sc">${v.hg}<i>–</i>${v.ag}</span>`
     : off ? `<span class="ko off">${off}</span>`
-    : `<span class="ko"><span class="kd">${day}</span><span>${hhmm(d)}</span></span>`;
+    : `<span class="ko"><span class="kd">${day}</span><span class="kt">${hhmm(d)}</span></span>`;
   const info = live ? (v.st === 'ht' ? 'Intervallo' : esc(v.min || 'Live')) : newDay ? day : '';
 
-  const cls = ['mt', live && 'live', (isRoma(hid) || isRoma(aid)) && 'roma', newDay && 'nd'].filter(Boolean).join(' ');
+  const cls = ['mt', live && 'live', (isRoma(hid) || isRoma(aid)) && 'roma'].filter(Boolean).join(' ');
   return `<div class="${cls}">
-    ${tn(name(m.homeTeam), tla(m.homeTeam), 'hm')}
-    ${crest(m.homeTeam?.crest)}<span class="ce">${center}</span>${crest(m.awayTeam?.crest)}
-    ${tn(name(m.awayTeam), tla(m.awayTeam), 'aw')}
+    ${tn(dispName(m.homeTeam), tla(m.homeTeam), 'hm')}
+    ${crest(m.homeTeam?.crest, hid)}<span class="ce">${center}</span>${crest(m.awayTeam?.crest, aid)}
+    ${tn(dispName(m.awayTeam), tla(m.awayTeam), 'aw')}
     <span class="me">${info}</span>
   </div>`;
 }
@@ -676,22 +686,18 @@ const dash = $('dash'), panels = { t: $('tblPanel'), c: $('curPanel'), n: $('nxt
 function layout(){
   const cs = p => { const r = p.getBoundingClientRect(); return { w: r.width, h: r.height - 2 }; };
   const T = cs(panels.t), M = cs(panels.c);
-  // altezza utile di ogni pannello per le righe (tolto il padding verticale, ≈ .7em)
-  const rowFromH = (h, n) => h / (n + .7);
-  const byHeight = Math.min(rowFromH(T.h, 22), rowFromH(M.h, 11)) * .43;
-  // larghezze minime (in em) con le sigle: classifica ≈ 9.6em, partite ≈ 12.2em
-  const byWidth = Math.min(T.w / 9.6, M.w / 12.2);
-  const fs = Math.max(9, Math.min(18, byHeight, byWidth));
+  const PAD = 8;   // padding verticale dei pannelli (4px sopra e sotto)
+  // riga di riferimento: classifica = testata + 20 righe, partite = testata + 10 righe
+  const row = Math.min((T.h - PAD) / 21, (M.h - PAD) / 11);
+  // larghezze minime (in em) con le sigle: classifica ≈ 11.5em (pos, sigla, Pt, G), partite ≈ 12.2em
+  const fs = Math.max(9, Math.min(18, row * .43, T.w / 11.5, M.w / 12.2));
   dash.style.setProperty('--fs', fs.toFixed(2) + 'px');
+  dash.style.setProperty('--th', row.toFixed(2) + 'px');
+  for (const p of Object.values(panels)) p.style.setProperty('--ph', (p.getBoundingClientRect().height - 2 - PAD) + 'px');
 
-  for (const p of Object.values(panels)){
-    const pad = parseFloat(getComputedStyle(p).paddingTop) * 2;
-    p.style.setProperty('--ph', (p.getBoundingClientRect().height - 2 - pad) + 'px');
-  }
-
-  // colonne visibili in base alla larghezza in em
+  // colonne visibili in base alla larghezza in em (G sempre visibile)
   const tw = T.w / fs, mw = M.w / fs;
-  panels.t.dataset.l = [tw >= 15 && 1, tw >= 21 && 2, tw >= 28 && 3, tw >= 42 && 4].filter(Boolean).join(' ');
+  panels.t.dataset.l = [tw >= 21 && 2, tw >= 28 && 3, tw >= 42 && 4].filter(Boolean).join(' ');
   const m = [mw >= 24 && 1, mw >= 33 && 2].filter(Boolean).join(' ');
   panels.c.dataset.m = panels.n.dataset.m = m;
 
