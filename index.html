@@ -19,10 +19,10 @@
   --live:#3DDC84; --live-bg:rgba(61,220,132,.12);          /* etichette Live */
   --now:#FFFFFF; --now-bg:rgba(255,255,255,.075);           /* righe delle partite in corso */
   --prov:#FFB020; --prov-bg:rgba(255,176,32,.12);           /* classifica provvisoria */
-  --roma:#C8102E; --roma-bg:rgba(253,149,4,.15); --gold:#FD9504;
+  --roma:#C8102E; --roma-bg:rgba(255,212,0,.13); --gold:#FD9504;
   --err:#FF6B6B;
   --ucl:#3DB4FF; --uel:#FF9A2E; --uecl:#2BF59A; --rel:#C77DFF;
-  --bar:3px;
+  --bar:2px;
   --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --hdr:clamp(48px,6.4vh,62px);
   --pad:clamp(10px,1.7vw,28px);
@@ -46,13 +46,13 @@ button{font:inherit;color:inherit}
 img{display:block}
 
 /* ── TESTATA ── */
-.top{height:var(--hdr);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 var(--pad);font-size:calc(var(--hdr)*.32)}
+.top{max-width:1440px;margin:0 auto;height:var(--hdr);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 var(--pad);font-size:calc(var(--hdr)*.32)}
 .brand{display:flex;align-items:center;gap:.6em;min-width:0}
 .brand svg{height:calc(var(--hdr)*.58);width:auto;flex-shrink:0}
-.brand h1{font-size:1.15em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1;position:relative;top:-.01em}
-.brand h1 span{color:var(--mut);font-weight:400;margin-left:.45em;font-size:.72em}
+.brand h1{font-size:1.15em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1;position:relative;top:.06em}
+.brand h1 span{color:var(--mut);font-weight:700;margin-left:.5em;font-size:.6em}
 .status{display:flex;align-items:center;gap:.55em;flex-shrink:0;line-height:1}
-#stTxt{background:none;border:0;color:var(--dim);white-space:nowrap;font-size:.8em;display:inline-flex;align-items:center;gap:.4em;cursor:default;padding:0}
+#stTxt{background:none;border:0;color:var(--dim);white-space:nowrap;font-size:.7em;font-weight:700;display:inline-flex;align-items:center;gap:.4em;cursor:default;padding:0}
 #stTxt.err{color:var(--err);cursor:pointer}
 #stTxt svg{width:1.05em;height:1.05em;flex-shrink:0}
 #refBtn.busy svg{animation:spin .9s linear infinite}
@@ -71,6 +71,7 @@ img{display:block}
 
 /* ── GRIGLIA ── */
 .dash{
+  max-width:1440px;margin:0 auto;
   --cols:minmax(0,1.12fr) minmax(0,1fr);
   height:calc(100dvh - var(--hdr) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
   min-height:380px;
@@ -94,10 +95,11 @@ img{display:block}
 .ttl .meta .rng{overflow:hidden;text-overflow:ellipsis;white-space:pre}
 .ttl .meta > span:not(.nav){display:flex;min-width:0}
 .nav{display:flex;gap:.3em;flex-shrink:0}
-.nb{background:var(--panel2);border:1px solid var(--edge);height:1.9em;min-width:1.9em;padding:0 .45em;border-radius:.45em;cursor:pointer;color:var(--dim);font-size:.95em;line-height:1;display:grid;place-items:center}
+.nb{background:var(--panel2);border:1px solid var(--edge);height:2.35em;min-width:2.35em;padding:0 .5em;border-radius:.45em;cursor:pointer;color:var(--dim);font-size:.95em;line-height:1;display:grid;place-items:center}
 .nb:hover:not(:disabled){color:var(--txt);background:var(--line2)}
 .nb:disabled{opacity:.3;cursor:default}
-.nb svg{width:.85em;height:.85em}
+.nb svg{width:1.05em;height:1.05em}
+.ttl .meta .nav{margin-left:.9em;gap:.35em}
 
 /* padding interno dei pannelli */
 .panel{--ip:1.05em}
@@ -137,11 +139,13 @@ img{display:block}
 .cr img{filter:grayscale(1) contrast(.55) brightness(1.7)}
 .cr.col img{filter:none}
 .cr.col.inv img{filter:invert(1) brightness(.92)}
-.fm{display:flex;gap:.22em;justify-content:flex-end}
-.fm i{width:.95em;height:.95em;display:grid;place-items:center;color:var(--dim)}
+.fm{display:flex;gap:.22em;justify-content:center}
+.st.th .fm{text-align:center}
+.fm i{width:1.1em;height:1.1em;display:grid;place-items:center;color:var(--dim)}
 .fm svg{width:100%;height:100%}
 .st.roma{background:var(--roma-bg);box-shadow:inset var(--bar) 0 var(--roma)}
-.st.roma .tn,.st.roma .pt{color:#fff;font-weight:600}
+.st.roma .tn,.st.roma .pt{color:#fff;font-weight:600;font-size:1.12em}
+.st.roma .cr img,.mt.roma .cr img{transform:scale(1.25)}
 .st.roma.lv .pt{color:var(--prov)}
 
 .p-table[data-l~="2"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.1em 1.7em 2.3em}
@@ -172,14 +176,17 @@ img{display:block}
 .mt.live .sc,.mt.live .me{color:var(--now)}
 .mt.live .sc{font-weight:600}
 .mt.roma{background:var(--roma-bg);box-shadow:inset var(--bar) 0 var(--roma)}
-.mt.roma .tn,.mt.roma .sc{color:#fff;font-weight:600}
+.mt.roma .tn,.mt.roma .sc{color:#fff;font-weight:600;font-size:1.12em}
 .mt.roma.live .sc{color:var(--now)}
 .mt.empty{visibility:hidden}
 
-.p-match[data-m~="1"] .mt{grid-template-columns:minmax(0,1fr) 1.3em 3.5em 1.3em minmax(0,1fr) 3.6em}
+.p-match[data-m~="1"] .mt{grid-template-columns:3.6em minmax(0,1fr) 1.3em 3.5em 1.3em minmax(0,1fr) 3.6em}
+.p-match[data-m~="1"] .mt::before{content:"";order:-2}
 .p-match[data-m~="1"] .mt .cr,.p-match[data-m~="1"] .mt .me{display:block}
 .p-match[data-m~="1"] .ko .kd{display:none}
-.p-match[data-m~="2"] .mt{grid-template-columns:4.6em minmax(0,1fr) 1.35em 3.8em 1.35em minmax(0,1fr);column-gap:.7em}
+.p-match[data-m~="2"] .mt{grid-template-columns:4.6em minmax(0,1fr) 1.35em 3.8em 1.35em minmax(0,1fr) 4.6em;column-gap:.7em}
+.p-match[data-m~="2"] .mt::before{content:none}
+.p-match[data-m~="2"] .mt::after{content:""}
 .p-match[data-m~="2"] .mt .me{order:-1;text-align:left}
 .panel[data-narrow] .ttl .meta .rng{display:none}
 .panel[data-narrow] .ttl h2{letter-spacing:.03em}
@@ -234,7 +241,7 @@ img{display:block}
   .dash{--cols:minmax(0,.8fr) minmax(0,1fr)}
   .brand h1 span,.status .lg{display:none}
   .panel{--ip:.8em}
-  :root{--bar:2px}
+  :root{--bar:1.5px}
 }
 @media (max-width:360px){ .dash{--cols:minmax(0,.74fr) minmax(0,1fr)} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
@@ -244,7 +251,7 @@ img{display:block}
 
 <header class="top">
   <div class="brand">
-    <svg viewBox="0 0 642.858 637.143" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#fff" d="M305.493-34.205C240.9 1.45 193.598 47.583 191.566 121.153l-128.573-87.5c-23.684 22.836-97.6 157.312-15.712 245l-67.858 38.57 66.428 53.572-76.428 56.428 87.858 23.572-136.43 152.143 212.142-48.572.715 47.142 98.573-46.427-.715 47.142 45.715-37.142 23.57-2.143c33.409 17.738 64.241 42.994 110 37.143 48.909-6.254 59.982-36.676 77.142-62.858l-63.57-.715-48.572 28.573-4.285-29.286-29.287-1.43-7.856-27.857h-25.715l-2.857-17.855c-26.884 2.237-35.787-16.504-40-40.715 72.918-6.706 160.582 35.037 207.142 53.57l90.715-61.427-103.572-117.858-.713-125.713-86.43-66.43Zm-2.189 318.852c30.041-.34 61.074 12.81 78.975 47.576-6.132 6.912-81.123 49.471-143.57-23.57 15.494-14.182 39.704-23.725 64.595-24.006z" transform="translate(79.15 34.205)"/></svg>
+    <svg viewBox="0 0 642.858 637.143" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#fd9504" d="M305.493-34.205C240.9 1.45 193.598 47.583 191.566 121.153l-128.573-87.5c-23.684 22.836-97.6 157.312-15.712 245l-67.858 38.57 66.428 53.572-76.428 56.428 87.858 23.572-136.43 152.143 212.142-48.572.715 47.142 98.573-46.427-.715 47.142 45.715-37.142 23.57-2.143c33.409 17.738 64.241 42.994 110 37.143 48.909-6.254 59.982-36.676 77.142-62.858l-63.57-.715-48.572 28.573-4.285-29.286-29.287-1.43-7.856-27.857h-25.715l-2.857-17.855c-26.884 2.237-35.787-16.504-40-40.715 72.918-6.706 160.582 35.037 207.142 53.57l90.715-61.427-103.572-117.858-.713-125.713-86.43-66.43Zm-2.189 318.852c30.041-.34 61.074 12.81 78.975 47.576-6.132 6.912-81.123 49.471-143.57-23.57 15.494-14.182 39.704-23.725 64.595-24.006z" transform="translate(79.15 34.205)"/></svg>
     <h1>Serie A<span>2026/2027</span></h1>
   </div>
   <div class="status">
