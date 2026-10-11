@@ -116,7 +116,7 @@ img{display:block}
 /* ── CLASSIFICA ──
    celle: pos | stemma | squadra | Pt | G | V | N | P | GF | GS | DR | ultime 5 */
 .st{display:grid;grid-template-rows:minmax(0,1fr);align-items:center;column-gap:.6em;padding:0 var(--ip);border-top:1px solid var(--line);
-    grid-template-columns:1.6em minmax(0,1fr) 2em 1.7em}
+    grid-template-columns:1.6em minmax(0,1fr) 1.7em 2em}
 .st > *{min-width:0;align-self:center}
 .st .cr,.st .v,.st .n,.st .p,.st .gf,.st .gs,.st .dr,.st .fm{display:none}
 .rows > .st:first-child,.rows > .mt:first-child{border-top-color:transparent}
@@ -128,8 +128,7 @@ img{display:block}
 .st.th h2{grid-column:1 / 3;margin-left:calc(-1 * (var(--ip) / .8 + 1px))}
 .p-table[data-l~="2"] .st.th h2{grid-column:1 / 4}
 .st.th > span{font-size:.74em;color:var(--mut);font-weight:500;text-align:right}
-.panel[data-narrow] .st.th h2{grid-column:1 / -1}
-.panel[data-narrow] .st.th > span{display:none}
+
 .nm{display:flex;align-items:center;gap:.45em;min-width:0}
 /* pallino "in campo ora": nello spazio tra posizione e stemma/nome, non toglie larghezza al nome */
 .pos{position:relative}
@@ -152,12 +151,12 @@ img{display:block}
 .cr.rm img{transform:scale(1.5)!important}
 .st.roma.lv .pt{color:var(--prov)}
 
-.p-table[data-l~="2"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.1em repeat(2,2.3em)}
+.p-table[data-l~="2"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.3em 2.1em 2.3em}
 .p-table[data-l~="2"] .st .cr,.p-table[data-l~="2"] .st .dr{display:block}
 .p-table[data-l~="2"] .st.th .cr{display:none}
-.p-table[data-l~="3"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.1em repeat(5,2.3em)}
+.p-table[data-l~="3"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.3em 2.1em repeat(4,2.3em)}
 .p-table[data-l~="3"] .st .v,.p-table[data-l~="3"] .st .n,.p-table[data-l~="3"] .st .p{display:block}
-.p-table[data-l~="4"] .st{grid-template-columns:1.7em 1.35em minmax(0,1fr) 2.2em repeat(7,2.3em) 8em;column-gap:.6em}
+.p-table[data-l~="4"] .st{grid-template-columns:1.7em 1.35em minmax(0,1fr) 2.3em 2.2em repeat(6,2.3em) 8em;column-gap:.6em}
 .p-table[data-l~="4"] .st .gf,.p-table[data-l~="4"] .st .gs{display:block}
 .p-table[data-l~="4"] .st .fm{display:flex}
 
@@ -173,7 +172,7 @@ img{display:block}
 .sc i{font-style:normal;color:var(--mut);margin:0 .14em;font-weight:400}
 .ko{display:flex;flex-direction:column;align-items:center;line-height:1.05;color:var(--dim)}
 .ko .kt{font-size:.82em}
-.ko .kd{font-size:.72em;color:var(--mut)}
+.ko .kd{font-size:.72em;color:var(--mut);margin-bottom:.3em}
 .ko.off{color:#FF6B6B;font-size:.78em}
 .me{text-align:right;color:var(--mut);font-size:.8em;white-space:nowrap}
 .mt.live{background:var(--now-bg);box-shadow:inset var(--bar) 0 var(--now)}
@@ -243,11 +242,10 @@ img{display:block}
 @media (max-width:1100px){ .dash{--cols:minmax(0,1fr) minmax(0,1.08fr)} }
 @media (max-width:820px){ .dash{--cols:minmax(0,.92fr) minmax(0,1.08fr)} }
 @media (max-width:480px){
-  .dash{--cols:minmax(0,.8fr) minmax(0,1fr)}
+  .dash{--cols:minmax(0,1fr) minmax(0,1fr)}
   .brand h1 span,.status .lg{display:none}
   .panel{--ip:.8em}
 }
-@media (max-width:360px){ .dash{--cols:minmax(0,.74fr) minmax(0,1fr)} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
@@ -270,7 +268,7 @@ img{display:block}
   <section class="panel p-table" id="tblPanel" aria-labelledby="tblTitle">
     <div class="ttl st th">
       <h2><span id="tblTitle">Classifica</span> <span id="tblPill"></span></h2>
-      <span class="pt" title="Punti">Pt</span><span class="g" title="Giocate">G</span><span class="v" title="Vinte">V</span><span class="n" title="Pareggiate">N</span><span class="p" title="Perse">P</span>
+      <span class="g" title="Giocate">G</span><span class="pt" title="Punti">PT</span><span class="v" title="Vinte">V</span><span class="n" title="Pareggiate">N</span><span class="p" title="Perse">P</span>
       <span class="gf" title="Gol fatti">GF</span><span class="gs" title="Gol subiti">GS</span><span class="dr" title="Differenza reti">DR</span><span class="fm">Ultime 5</span>
     </div>
     <div class="card"><div class="rows" id="tbl"></div></div>
@@ -635,8 +633,8 @@ function renderTable(){
     return `<div class="${cls}">
       <span class="pos">${r.rank}</span>${crest(r.crest, r.id, isRoma(r.id))}
       <span class="nm">${tn(r.name, r.tla || r.name)}${live.has(r.id) ? '<i class="ld" title="In campo ora"></i>' : ''}</span>
-      <span class="pt"${r.adj ? ` title="Include ${r.adj} punti di penalizzazione o bonus"` : ''}>${r.pts}</span>
-      <span class="g">${r.p}</span><span class="v">${r.w}</span><span class="n">${r.d}</span><span class="p">${r.l}</span>
+      <span class="g">${r.p}</span>
+      <span class="pt"${r.adj ? ` title="Include ${r.adj} punti di penalizzazione o bonus"` : ''}>${r.pts}</span><span class="v">${r.w}</span><span class="n">${r.d}</span><span class="p">${r.l}</span>
       <span class="gf">${r.gf}</span><span class="gs">${r.ga}</span><span class="dr">${r.gd > 0 ? '+' + r.gd : r.gd}</span>
       <span class="fm">${r.form.map(x => `<i title="${FORM_T[x]}">${FORM[x]}</i>`).join('')}</span>
     </div>`;
