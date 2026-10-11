@@ -52,8 +52,10 @@ img{display:block}
 .brand{display:flex;align-items:center;gap:.6em;min-width:0}
 .brand svg{height:calc(var(--hdr)*.58);width:auto;flex-shrink:0}
 .brand h1{font-size:1.15em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1;position:relative;top:.06em}
+.brand h1 i{font-style:normal}
+.brand h1 .ys{display:none}
 .brand h1 span{color:var(--mut);font-weight:700;margin-left:.5em;font-size:.6em}
-.status{display:flex;align-items:center;gap:.55em;flex-shrink:0;line-height:1}
+.status{display:flex;align-items:center;gap:1em;flex-shrink:0;line-height:1}
 #stTxt{background:none;border:0;color:var(--dim);white-space:nowrap;font-size:.7em;font-weight:700;display:inline-flex;align-items:center;gap:.4em;cursor:default;padding:0}
 #stTxt.err{color:var(--err);cursor:pointer}
 #stTxt svg{width:1.05em;height:1.05em;flex-shrink:0}
@@ -67,9 +69,11 @@ img{display:block}
 .pill.prov::before{content:"";width:.5em;height:.5em;border-radius:50%;background:currentColor;animation:blink 1.4s ease infinite}
 .pill.live::before{content:"";width:.5em;height:.5em;border-radius:50%;background:currentColor;animation:blink 1.4s ease infinite}
 .pill.late{background:rgba(255,255,255,.06);color:var(--dim)}
-.ib{background:none;border:0;color:var(--dim);width:calc(var(--hdr)*.7);height:calc(var(--hdr)*.7);border-radius:8px;display:grid;place-items:center;cursor:pointer;flex-shrink:0}
-.ib:hover{background:var(--panel2);color:var(--txt)}
-.ib svg{width:50%;height:50%}
+.ib{position:relative;background:none;border:0;padding:0;color:var(--dim);width:calc(var(--hdr)*.36);height:calc(var(--hdr)*.36);display:grid;place-items:center;cursor:pointer;flex-shrink:0}
+.ib::before{content:"";position:absolute;inset:-10px;border-radius:8px}
+.ib:hover{color:var(--txt)}
+.ib:hover::before{background:rgba(255,255,255,.06)}
+.ib svg{width:100%;height:100%}
 
 /* ── GRIGLIA ── */
 .dash{
@@ -243,9 +247,13 @@ img{display:block}
 @media (max-width:820px){ .dash{--cols:minmax(0,.92fr) minmax(0,1.08fr)} }
 @media (max-width:480px){
   .dash{--cols:minmax(0,1fr) minmax(0,1fr)}
-  .brand h1 span,.status .lg{display:none}
+  /* posizioni: numeri più piccoli, colonna più stretta */
+  .st{grid-template-columns:1.15em minmax(0,1fr) 1.7em 2em;column-gap:.5em}
+  .pos{font-size:.74em}
+  .status .lg{display:none}
   .panel{--ip:.8em}
 }
+@media (max-width:420px){ .brand h1 .yl{display:none} .brand h1 .ys{display:inline} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
@@ -254,7 +262,7 @@ img{display:block}
 <header class="top">
   <div class="brand">
     <svg viewBox="0 0 642.858 637.143" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#fd9504" d="M305.493-34.205C240.9 1.45 193.598 47.583 191.566 121.153l-128.573-87.5c-23.684 22.836-97.6 157.312-15.712 245l-67.858 38.57 66.428 53.572-76.428 56.428 87.858 23.572-136.43 152.143 212.142-48.572.715 47.142 98.573-46.427-.715 47.142 45.715-37.142 23.57-2.143c33.409 17.738 64.241 42.994 110 37.143 48.909-6.254 59.982-36.676 77.142-62.858l-63.57-.715-48.572 28.573-4.285-29.286-29.287-1.43-7.856-27.857h-25.715l-2.857-17.855c-26.884 2.237-35.787-16.504-40-40.715 72.918-6.706 160.582 35.037 207.142 53.57l90.715-61.427-103.572-117.858-.713-125.713-86.43-66.43Zm-2.189 318.852c30.041-.34 61.074 12.81 78.975 47.576-6.132 6.912-81.123 49.471-143.57-23.57 15.494-14.182 39.704-23.725 64.595-24.006z" transform="translate(79.15 34.205)"/></svg>
-    <h1>Serie A<span>2026/2027</span></h1>
+    <h1>Serie A<span><i class="yl">2026/2027</i><i class="ys">26/27</i></span></h1>
   </div>
   <div class="status">
     <span id="livePill" hidden></span>
