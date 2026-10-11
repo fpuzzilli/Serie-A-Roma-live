@@ -18,7 +18,8 @@
   --txt:#E8ECF4; --dim:#A1AABB; --mut:#5F687C;
   --live:#FFB020; --live-bg:rgba(255,176,32,.10);
   --roma-bg:rgba(142,31,47,.34); --roma:#B8203B; --gold:#F0BC42;
-  --ucl:#3D6FF5; --uel:#F57C1F; --uecl:#1FBF6A; --rel:#E5484D;
+  --ucl:#3DB4FF; --uel:#FF9A2E; --uecl:#2BF59A; --rel:#C77DFF;
+  --bar:3px;
   --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --hdr:clamp(48px,6.4vh,62px);
   --pad:clamp(10px,1.7vw,28px);
@@ -45,7 +46,7 @@ img{display:block}
 .top{height:var(--hdr);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 var(--pad);font-size:calc(var(--hdr)*.32)}
 .brand{display:flex;align-items:center;gap:.6em;min-width:0}
 .brand svg{height:calc(var(--hdr)*.58);width:auto;flex-shrink:0}
-.brand h1{font-size:1.15em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1;position:relative;top:-.08em}
+.brand h1{font-size:1.15em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1;position:relative;top:-.04em}
 .brand h1 span{color:var(--mut);font-weight:400;margin-left:.45em;font-size:.72em}
 .status{display:flex;align-items:center;gap:.55em;flex-shrink:0;line-height:1}
 .dot{width:.5em;height:.5em;border-radius:50%;background:#1FBF6A;flex-shrink:0}
@@ -53,6 +54,7 @@ img{display:block}
 .dot.err{background:var(--rel)}
 #stTxt{color:var(--dim);white-space:nowrap;font-size:.8em}
 .pill{display:inline-flex;align-items:center;gap:.4em;font-size:.78em;font-weight:600;padding:.3em .6em;border-radius:99px;white-space:nowrap;line-height:1}
+.ttl .pill{text-transform:none;letter-spacing:0;font-size:1.05em;position:relative;top:-.08em}
 .pill.live{background:var(--live-bg);color:var(--live)}
 .pill.live::before{content:"";width:.5em;height:.5em;border-radius:50%;background:currentColor;animation:blink 1.4s ease infinite}
 .pill.late{background:rgba(255,255,255,.06);color:var(--dim)}
@@ -79,10 +81,11 @@ img{display:block}
 
 /* ── TITOLI (stessa dimensione nei tre pannelli) ── */
 .ttl{flex:0 0 var(--th);height:var(--th);min-height:0;display:flex;align-items:center;justify-content:space-between;gap:.7em;padding:0 var(--ip);min-width:0;border-bottom:1px solid var(--line)}
-.ttl h2{font-size:1.08em;font-weight:600;letter-spacing:-.012em;white-space:nowrap;display:flex;align-items:center;gap:.55em;min-width:0;overflow:hidden}
+.ttl h2{font-size:.8em;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);white-space:nowrap;display:flex;align-items:center;gap:.7em;min-width:0;overflow:hidden}
 .ttl h2 > span:first-child{overflow:hidden;text-overflow:ellipsis}
 .ttl .meta{display:flex;align-items:center;gap:.5em;color:var(--dim);font-size:.82em;white-space:nowrap;min-width:0}
-.ttl .meta .rng{overflow:hidden;text-overflow:ellipsis}
+.ttl .meta .rng{overflow:hidden;text-overflow:ellipsis;white-space:pre}
+.ttl .meta > span:not(.nav){display:flex;min-width:0}
 .nav{display:flex;gap:.3em;flex-shrink:0}
 .nb{background:var(--panel2);border:1px solid var(--edge);height:1.9em;min-width:1.9em;padding:0 .45em;border-radius:.45em;cursor:pointer;color:var(--dim);font-size:.95em;line-height:1;display:grid;place-items:center}
 .nb:hover:not(:disabled){color:var(--txt);background:var(--line2)}
@@ -93,7 +96,7 @@ img{display:block}
 .panel{--ip:1.05em}
 
 /* ── NOMI SQUADRA: stessa forma ovunque ── */
-.tn{white-space:nowrap;overflow:hidden;text-overflow:clip;font-weight:450}
+.tn{white-space:nowrap;overflow:hidden;text-overflow:clip;font-weight:400}
 .tn .s{display:none}
 .dash.short .tn .f{display:none}
 .dash.short .tn .s{display:inline}
@@ -108,18 +111,17 @@ img{display:block}
 .rows > .st:first-child,.rows > .mt:first-child{border-top-color:transparent}
 .pos{text-align:center;font-weight:500;font-size:.86em;color:var(--mut)}
 .st.ucl{--z:var(--ucl)} .st.uel{--z:var(--uel)} .st.uecl{--z:var(--uecl)} .st.rel{--z:var(--rel)}
-.st.ucl,.st.uel,.st.uecl,.st.rel{box-shadow:inset 3px 0 var(--z)}
+.st.ucl,.st.uel,.st.uecl,.st.rel{box-shadow:inset var(--bar) 0 var(--z)}
 /* riga del titolo della classifica: stessa griglia delle righe, titolo sopra posizione/stemma/squadra */
 .st.th{display:grid;border-top:0;justify-content:stretch}
 .st.th h2{grid-column:1 / 3}
 .p-table[data-l~="2"] .st.th h2{grid-column:1 / 4}
 .st.th > span{font-size:.74em;color:var(--mut);font-weight:500;text-align:right}
-.st.th .pt{font-weight:500}
 .panel[data-narrow] .st.th h2{grid-column:1 / -1}
 .panel[data-narrow] .st.th > span{display:none}
 .nm{display:flex;align-items:center;gap:.45em;min-width:0}
 .ld{width:.42em;height:.42em;border-radius:50%;background:var(--live);flex-shrink:0;animation:blink 1.4s ease infinite}
-.pt{text-align:right;font-weight:600;font-size:1.02em}
+.pt{text-align:right;font-weight:400;font-size:1.02em;color:var(--txt)}
 .st.lv .pt{color:var(--live)}
 .g,.v,.n,.p,.gf,.gs,.dr{text-align:right;color:var(--dim);font-size:.86em}
 .cr{width:1.3em;height:1.3em}
@@ -127,8 +129,9 @@ img{display:block}
 .cr.inv img{filter:invert(1) brightness(.92)}
 .fm{display:flex;gap:.22em;justify-content:flex-end}
 .fm i{font-style:normal;width:1.5em;height:1.5em;border-radius:.25em;display:grid;place-items:center;font-size:.66em;font-weight:500;color:var(--dim);border:1px solid currentColor}
-.st.roma{background:var(--roma-bg)}
-.st.roma .tn{color:#fff;font-weight:550}
+.st.roma{background:var(--roma-bg);box-shadow:inset var(--bar) 0 var(--roma)}
+.st.roma .tn,.st.roma .pt{color:#fff;font-weight:600}
+.st.roma.lv .pt{color:var(--live)}
 
 .p-table[data-l~="2"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.1em 1.7em 2.3em}
 .p-table[data-l~="2"] .st .cr,.p-table[data-l~="2"] .st .dr{display:block}
@@ -147,18 +150,18 @@ img{display:block}
 .mt .cr,.mt .me{display:none}
 .mt .hm{text-align:right}
 .ce{text-align:center;white-space:nowrap}
-.sc{font-weight:600;letter-spacing:.01em}
+.sc{font-weight:400;letter-spacing:.01em}
 .sc i{font-style:normal;color:var(--mut);margin:0 .14em;font-weight:400}
 .ko{display:flex;flex-direction:column;align-items:center;line-height:1.05;color:var(--dim)}
 .ko .kt{font-size:.9em}
 .ko .kd{font-size:.72em;color:var(--mut)}
-.ko.off{color:var(--rel);font-size:.78em}
+.ko.off{color:#FF6B6B;font-size:.78em}
 .me{text-align:right;color:var(--mut);font-size:.8em;white-space:nowrap}
-.mt.live{background:var(--live-bg);box-shadow:inset 3px 0 var(--live)}
+.mt.live{background:var(--live-bg);box-shadow:inset var(--bar) 0 var(--live)}
 .mt.live .sc,.mt.live .me{color:var(--live)}
-.mt.roma{box-shadow:inset 3px 0 var(--roma)}
-.mt.roma.live{background:var(--live-bg)}
-.mt.roma .tn{color:#fff;font-weight:550}
+.mt.roma{background:var(--roma-bg);box-shadow:inset var(--bar) 0 var(--roma)}
+.mt.roma .tn,.mt.roma .sc{color:#fff;font-weight:600}
+.mt.roma.live .sc{color:var(--live)}
 .mt.empty{visibility:hidden}
 
 .p-match[data-m~="1"] .mt{grid-template-columns:minmax(0,1fr) 1.3em 3.5em 1.3em minmax(0,1fr) 3.6em}
@@ -166,7 +169,9 @@ img{display:block}
 .p-match[data-m~="1"] .ko .kd{display:none}
 .p-match[data-m~="2"] .mt{grid-template-columns:4.6em minmax(0,1fr) 1.35em 3.8em 1.35em minmax(0,1fr);column-gap:.7em}
 .p-match[data-m~="2"] .mt .me{order:-1;text-align:left}
-.panel[data-narrow] .rng{display:none}
+.panel[data-narrow] .ttl .meta .rng{display:none}
+.panel[data-narrow] .ttl h2{letter-spacing:.03em}
+.panel[data-narrow] .wide{display:none}
 .panel[data-narrow] .ttl .pill{font-size:0;padding:4px;gap:0}
 .panel[data-narrow] .ttl .pill::before{width:7px;height:7px}
 
@@ -217,6 +222,7 @@ img{display:block}
   .dash{--cols:minmax(0,.8fr) minmax(0,1fr)}
   .brand h1 span,.status .lg{display:none}
   .panel{--ip:.8em}
+  :root{--bar:2px}
 }
 @media (max-width:360px){ .dash{--cols:minmax(0,.74fr) minmax(0,1fr)} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
@@ -258,9 +264,9 @@ img{display:block}
 
   <section class="panel p-match" id="nxtPanel" aria-labelledby="nxtTitle" aria-roledescription="carosello">
     <div class="ttl">
-      <h2><span id="nxtTitle">Giornata</span></h2>
+      <h2><span id="nxtTitle">Prossime<span class="wide"> giornate</span></span></h2>
       <div class="meta">
-        <span class="rng" id="nxtMeta"></span>
+        <span id="nxtMeta"></span>
         <span class="nav">
           <button class="nb" id="homeMd" type="button" title="Torna alla prossima giornata" aria-label="Torna alla prossima giornata" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
           <button class="nb" id="prevMd" type="button" aria-label="Giornata precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
@@ -657,15 +663,14 @@ function renderMatchdays(dir){
   const cArr = (S.cur && g.get(S.cur)) || [];
   const live = cArr.some(m => isLive(view(m)));
   $('curPill').innerHTML = live ? '<span class="pill live">Live</span>' : '';
-  $('curMeta').innerHTML = S.cur ? `<span class="rng">${S.cur}ª giornata · ${esc(rangeLabel(cArr))}</span>` : '';
+  $('curMeta').innerHTML = S.cur ? `<span><span class="mdn">${S.cur}ª</span><span class="rng"> giornata · ${esc(rangeLabel(cArr))}</span></span>` : '';
   $('curRows').innerHTML = cArr.length ? matchRows(cArr) : '<div class="msg"><p>Nessuna giornata disponibile.</p></div>';
 
   // carosello in basso: parte dalla prossima giornata, scorre su tutto il campionato
   const next = S.cur ? Math.min(S.cur + 1, last) : first;
   if (S.browseAuto || S.browse === null || !g.has(S.browse)) S.browse = next;
   const b = S.browse, bArr = g.get(b) || [];
-  $('nxtTitle').textContent = `Giornata ${b}`;
-  $('nxtMeta').textContent = rangeLabel(bArr);
+  $('nxtMeta').innerHTML = `<span class="mdn">${b}ª</span><span class="rng"> giornata · ${esc(rangeLabel(bArr))}</span>`;
   $('prevMd').disabled = b <= first;
   $('nextMd').disabled = b >= last;
   $('homeMd').hidden = b === next;
