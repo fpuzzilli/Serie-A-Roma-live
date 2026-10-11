@@ -19,10 +19,10 @@
   --live:#3DDC84; --live-bg:rgba(61,220,132,.12);          /* etichette Live */
   --now:#FFFFFF; --now-bg:rgba(255,255,255,.075);           /* righe delle partite in corso */
   --prov:#FFB020; --prov-bg:rgba(255,176,32,.12);           /* classifica provvisoria */
-  --roma:#C8102E; --roma-bg:rgba(255,236,80,.12); --gold:#FD9504;
+  --roma:#C8102E; --roma-bg:rgba(255,212,0,.13); --gold:#FD9504;
   --err:#FF6B6B;
-  --ucl:#5A93C8; --uel:#C98A4E; --uecl:#4FA57C; --rel:#9278BC;
-  --bar:2px;
+  --ucl:#3DB4FF; --uel:#FF9A2E; --uecl:#2BF59A; --rel:#C77DFF;
+  --bar:1.5px;
   --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --hdr:clamp(48px,6.4vh,62px);
   --pad:clamp(10px,1.7vw,28px);
@@ -52,7 +52,6 @@ img{display:block}
 .brand h1{font-size:1.15em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1;position:relative;top:.06em}
 .brand h1 span{color:var(--mut);font-weight:700;margin-left:.5em;font-size:.6em}
 .status{display:flex;align-items:center;gap:.55em;flex-shrink:0;line-height:1}
-.stx{display:inline-flex;align-items:center;gap:.55em}
 #stTxt{background:none;border:0;color:var(--dim);white-space:nowrap;font-size:.7em;font-weight:700;display:inline-flex;align-items:center;gap:.4em;cursor:default;padding:0}
 #stTxt.err{color:var(--err);cursor:pointer}
 #stTxt svg{width:1.05em;height:1.05em;flex-shrink:0}
@@ -116,10 +115,9 @@ img{display:block}
 .st{display:grid;grid-template-rows:minmax(0,1fr);align-items:center;column-gap:.6em;padding:0 var(--ip);border-top:1px solid var(--line);
     grid-template-columns:1.6em minmax(0,1fr) 2em 1.7em}
 .st > *{min-width:0;align-self:center}
-.p-table .st{padding-left:calc(var(--ip) - .3em)}
 .st .cr,.st .v,.st .n,.st .p,.st .gf,.st .gs,.st .dr,.st .fm{display:none}
 .rows > .st:first-child,.rows > .mt:first-child{border-top-color:transparent}
-.pos{text-align:left;font-weight:500;font-size:.86em;color:var(--mut)}
+.pos{text-align:center;font-weight:500;font-size:.86em;color:var(--mut)}
 .st.ucl{--z:var(--ucl)} .st.uel{--z:var(--uel)} .st.uecl{--z:var(--uecl)} .st.rel{--z:var(--rel)}
 .st.ucl,.st.uel,.st.uecl,.st.rel{box-shadow:inset var(--bar) 0 var(--z)}
 /* riga del titolo della classifica: stessa griglia delle righe, titolo sopra posizione/stemma/squadra */
@@ -132,7 +130,7 @@ img{display:block}
 .nm{display:flex;align-items:center;gap:.45em;min-width:0}
 /* pallino "in campo ora": nello spazio tra posizione e stemma/nome, non toglie larghezza al nome */
 .pos{position:relative}
-.st.lv .pos::after{content:"";position:absolute;right:-.1em;top:50%;width:.46em;height:.46em;margin-top:-.23em;border-radius:50%;background:var(--prov);animation:blink 1.4s ease infinite}
+.st.lv .pos::after{content:"";position:absolute;right:-.5em;top:50%;width:.4em;height:.4em;margin-top:-.2em;border-radius:50%;background:var(--prov);animation:blink 1.4s ease infinite}
 .pt{text-align:right;font-weight:400;font-size:1.02em;color:var(--txt)}
 .st.lv .pt{color:var(--prov)}
 .g,.v,.n,.p,.gf,.gs,.dr{text-align:right;color:var(--dim);font-size:.86em}
@@ -175,11 +173,11 @@ img{display:block}
 .ko.off{color:#FF6B6B;font-size:.78em}
 .me{text-align:right;color:var(--mut);font-size:.8em;white-space:nowrap}
 .mt.live{background:var(--now-bg);box-shadow:inset var(--bar) 0 var(--now)}
-.mt.live .sc,.mt.live .me{color:var(--prov)}
+.mt.live .sc,.mt.live .me{color:var(--now)}
 .mt.live .sc{font-weight:600}
 .mt.roma{background:var(--roma-bg);box-shadow:inset var(--bar) 0 var(--roma)}
 .mt.roma .tn,.mt.roma .sc{color:#fff;font-weight:600;font-size:1.12em}
-.mt.roma.live .sc{color:var(--prov)}
+.mt.roma.live .sc{color:var(--now)}
 .mt.empty{visibility:hidden}
 
 .p-match[data-m~="1"] .mt{grid-template-columns:3.6em minmax(0,1fr) 1.3em 3.5em 1.3em minmax(0,1fr) 3.6em}
@@ -243,7 +241,7 @@ img{display:block}
   .dash{--cols:minmax(0,.8fr) minmax(0,1fr)}
   .brand h1 span,.status .lg{display:none}
   .panel{--ip:.8em}
-  :root{--bar:1.5px}
+  :root{--bar:1px}
 }
 @media (max-width:360px){ .dash{--cols:minmax(0,.74fr) minmax(0,1fr)} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
@@ -257,8 +255,8 @@ img{display:block}
     <h1>Serie A<span>2026/2027</span></h1>
   </div>
   <div class="status">
-    <span class="stx" id="stx"><span id="livePill" hidden></span>
-    <button type="button" id="stTxt" aria-live="polite">Caricamento…</button></span>
+    <span id="livePill" hidden></span>
+    <button type="button" id="stTxt" aria-live="polite">Caricamento…</button>
     <button class="ib" id="refBtn" type="button" title="Aggiorna ora" aria-label="Aggiorna ora"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
     <button class="ib" id="setBtn" type="button" title="Impostazioni" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   </div>
@@ -715,22 +713,6 @@ function renderAll(){ renderMatchdays(); renderTable(); layout(); }
 /* ── IMPAGINAZIONE: una sola dimensione di carattere e una sola forma dei nomi ── */
 const dash = $('dash'), panels = { t: $('tblPanel'), c: $('curPanel'), n: $('nxtPanel') };
 
-// porta la linea di base del testo a destra della testata su quella di "Serie A"
-function alignHeader(){
-  const stx = $('stx');
-  stx.style.transform = '';
-  const base = el => {
-    const s = document.createElement('span');
-    s.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
-    el.appendChild(s);
-    const y = s.getBoundingClientRect().bottom;
-    s.remove();
-    return y;
-  };
-  const d = base(document.querySelector('.brand h1')) - base($('stTxt'));
-  if (Math.abs(d) < 30) stx.style.transform = `translateY(${d.toFixed(1)}px)`;
-}
-
 function layout(){
   const cs = p => { const r = p.getBoundingClientRect(); return { w: r.width, h: r.height - 2 }; };
   const T = cs(panels.t), M = cs(panels.c);
@@ -751,8 +733,6 @@ function layout(){
 
   // titoli: nei pannelli stretti spariscono le date e le etichette diventano un punto
   for (const p of Object.values(panels)) p.toggleAttribute('data-narrow', p.getBoundingClientRect().width / fs < 21);
-
-  alignHeader();
 
   // nomi interi ovunque se entrano tutti, altrimenti sigle ovunque
   dash.classList.remove('short');
