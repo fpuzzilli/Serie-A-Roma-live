@@ -178,6 +178,7 @@ img{display:block}
 .ko .kt{font-size:.82em}
 .ko .kd{font-size:.72em;color:var(--mut);margin-bottom:.3em}
 .mt:not(.day1) .ko .kd{display:none}
+.ko.off .sh{display:none}
 .ko.off{color:#FF6B6B;font-size:.78em}
 .me{text-align:right;color:var(--mut);font-size:.8em;white-space:nowrap}
 .mt.live{background:var(--now-bg);box-shadow:inset var(--bar) 0 var(--now)}
@@ -252,6 +253,10 @@ img{display:block}
   .st{grid-template-columns:1.15em minmax(0,1fr) 1.7em 2em;column-gap:.5em}
   .pos{font-size:.74em}
   .ko{line-height:.98}
+  .mt{grid-template-columns:minmax(0,1fr) 2.65em minmax(0,1fr);column-gap:.4em}
+  .p-match .card{--ip:.6em}
+  .ko.off .lg{display:none}
+  .ko.off .sh{display:inline}
   .ko .kd{margin-bottom:.22em}
   .status .lg{display:none}
   .panel{--ip:.8em}
@@ -665,7 +670,7 @@ function matchRow(m, newDay){
 
   const center = hasScore(v)
     ? `<span class="sc">${v.hg}<i>–</i>${v.ag}</span>`
-    : off ? `<span class="ko off">${off}</span>`
+    : off ? `<span class="ko off"><span class="lg">${off}</span><span class="sh">${off.slice(0, 4)}.</span></span>`
     : `<span class="ko"><span class="kd">${day}</span><span class="kt">${hhmm(d)}</span></span>`;
   const info = live ? (v.st === 'ht' ? 'Intervallo' : esc(v.min || 'Live')) : newDay ? day : '';
 
@@ -734,24 +739,36 @@ function layout(){
   const row = Math.min((T.h - PAD) / 21, (M.h - PAD) / 11);
   // larghezze minime (in em) con le sigle: classifica ≈ 11.5em (pos, sigla, Pt, G), partite ≈ 12.2em
   const ratio = window.innerWidth <= 480 ? .5 : .43;   // su telefono le righe hanno margine: testo più grande
-  const fs = Math.max(9, Math.min(13.5, row * ratio, T.w / 11.5, M.w / 12.2));
-  dash.style.setProperty('--fs', fs.toFixed(2) + 'px');
+  const fsMax = Math.max(9, Math.min(13.5, row * ratio, T.w / 11.5, M.w / 12.2));
   dash.style.setProperty('--th', row.toFixed(2) + 'px');
   for (const p of Object.values(panels)) p.style.setProperty('--ph', (p.getBoundingClientRect().height - 2 - PAD) + 'px');
 
-  // colonne visibili in base alla larghezza in em (G sempre visibile)
-  const tw = T.w / fs, mw = M.w / fs;
-  panels.t.dataset.l = [tw >= 21 && 2, tw >= 28 && 3, tw >= 42 && 4].filter(Boolean).join(' ');
-  const m = [mw >= 24 && 1, mw >= 33 && 2].filter(Boolean).join(' ');
-  panels.c.dataset.m = panels.n.dataset.m = m;
+  const apply = fs => {
+    dash.style.setProperty('--fs', fs.toFixed(2) + 'px');
+    // colonne visibili in base alla larghezza in em (G sempre visibile)
+    const tw = T.w / fs, mw = M.w / fs;
+    panels.t.dataset.l = [tw >= 21 && 2, tw >= 28 && 3, tw >= 42 && 4].filter(Boolean).join(' ');
+    panels.c.dataset.m = panels.n.dataset.m = [mw >= 24 && 1, mw >= 33 && 2].filter(Boolean).join(' ');
+    // titoli: nei pannelli stretti spariscono le date e le etichette diventano un punto
+    for (const p of Object.values(panels)) p.toggleAttribute('data-narrow', p.getBoundingClientRect().width / fs < 21);
+  };
+  const fullFits = () => {
+    dash.classList.remove('short');
+    return ![...dash.querySelectorAll('.tn')].some(e => e.scrollWidth > e.clientWidth + .5);
+  };
 
-  // titoli: nei pannelli stretti spariscono le date e le etichette diventano un punto
-  for (const p of Object.values(panels)) p.toggleAttribute('data-narrow', p.getBoundingClientRect().width / fs < 21);
-
-  // nomi interi ovunque se entrano tutti, altrimenti sigle ovunque
-  dash.classList.remove('short');
-  const overflow = [...dash.querySelectorAll('.tn')].some(e => e.scrollWidth > e.clientWidth + .5);
-  dash.classList.toggle('short', overflow);
+  // nomi interi ovunque se entrano tutti, altrimenti sigle ovunque.
+  // Su telefono si preferiscono i nomi interi: si scende un po' col carattere (fino a 10px) prima di passare alle sigle.
+  apply(fsMax);
+  if (fullFits()) return;
+  if (window.innerWidth <= 480){
+    for (let f = fsMax - .25; f >= Math.max(10, fsMax - 3.5); f -= .25){
+      apply(f);
+      if (fullFits()) return;
+    }
+    apply(fsMax);
+  }
+  dash.classList.add('short');
 }
 
 let rafId = 0;
