@@ -49,12 +49,26 @@ img{display:block}
 
 /* ── TESTATA ── */
 .top{max-width:1440px;margin:0 auto;height:var(--hdr);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 var(--pad);font-size:calc(var(--hdr)*.32)}
-.brand{display:flex;align-items:center;gap:.6em;min-width:0}
-.brand svg{height:calc(var(--hdr)*.58);width:auto;flex-shrink:0}
-.brand h1{font-size:1.15em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1;position:relative;top:.06em}
-.brand h1 i{font-style:normal}
-.brand h1 .ys{display:none}
-.brand h1 span{color:var(--mut);font-weight:700;margin-left:.5em;font-size:.6em}
+/* marchio come nella prima versione: lupo in un riquadro da 36px, titolo 15px, sottotitolo 11px */
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand .badge{width:36px;height:36px;padding:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand svg{width:100%;height:100%}
+.bt{display:flex;flex-direction:column;min-width:0}
+.brand h1{font-size:15px;font-weight:600;letter-spacing:-.3px;white-space:nowrap;line-height:1.25;color:var(--txt)}
+.brand p{font-size:11px;font-weight:400;color:#5A6478;white-space:nowrap;margin-top:1px;line-height:1.25}
+.brand p .py{display:none}
+/* telefono: la stagione scende nel sottotitolo; sui più stretti resta solo la stagione */
+@media (max-width:480px){
+  .brand h1 .sy{display:none}
+  .brand p .py{display:inline}
+  .brand p .pd{display:none}
+  .status{gap:.85em}
+}
+/* telefoni stretti: "Live" in testata diventa un punto verde */
+@media (max-width:370px){
+  #livePill{font-size:0;padding:4px;gap:0}
+  #livePill::before{width:8px;height:8px}
+}
 .status{display:flex;align-items:center;gap:1em;flex-shrink:0;line-height:1}
 #stTxt{background:none;border:0;color:var(--dim);white-space:nowrap;font-size:.7em;font-weight:700;display:inline-flex;align-items:center;gap:.4em;cursor:default;padding:0}
 #stTxt.err{color:var(--err);cursor:pointer}
@@ -101,11 +115,12 @@ img{display:block}
 .ttl .meta .rng{overflow:hidden;text-overflow:ellipsis;white-space:pre}
 .ttl .meta > span:not(.nav){display:flex;min-width:0}
 .nav{display:flex;gap:.3em;flex-shrink:0}
-.nb{background:var(--panel2);border:1px solid var(--edge);height:2.35em;min-width:2.35em;padding:0 .5em;border-radius:.45em;cursor:pointer;color:var(--dim);font-size:.95em;line-height:1;display:grid;place-items:center}
+.nb{background:var(--panel2);border:1px solid var(--edge);height:var(--h,2.23em);min-width:var(--h,2.23em);padding:0 .5em;border-radius:.45em;cursor:pointer;color:var(--dim);font-size:1em;line-height:1;display:grid;place-items:center}
 .nb:hover:not(:disabled){color:var(--txt);background:var(--line2)}
 .nb:disabled{opacity:.3;cursor:default}
-.nb svg{width:1.05em;height:1.05em}
-.ttl .meta .nav{margin-left:.9em;gap:.35em}
+.nb svg{width:1em;height:1em}
+/* pulsanti appoggiati alla linea di base del testo; più bassi se lo spazio sopra il titolo è poco */
+.ttl .meta .nav{--h:min(2.23em, calc(var(--th,30px) * .6 + var(--gap) * .45 - 3px));margin-left:.9em;gap:.35em;transform:translateY(calc(.27em - var(--h) / 2))}
 
 /* padding interno dei pannelli */
 .panel{--ip:1.05em}
@@ -145,7 +160,7 @@ img{display:block}
 .cr img{filter:grayscale(1) contrast(.55) brightness(1.7)}
 .cr.col img{filter:none}
 .cr.col.inv img{filter:invert(1) brightness(.92)}
-.fm{display:flex;gap:.22em;justify-content:center}
+.fm{display:flex;gap:0;justify-content:center}
 .st.th .fm{text-align:center}
 .fm i{width:1.3em;height:1.3em;display:grid;place-items:center;color:var(--dim)}
 .fm svg{width:100%;height:100%}
@@ -160,7 +175,7 @@ img{display:block}
 .p-table[data-l~="2"] .st.th .cr{display:none}
 .p-table[data-l~="3"] .st{grid-template-columns:1.2em 1.3em minmax(0,1fr) 2.3em 2.1em repeat(4,2.3em)}
 .p-table[data-l~="3"] .st .v,.p-table[data-l~="3"] .st .n,.p-table[data-l~="3"] .st .p{display:block}
-.p-table[data-l~="4"] .st{grid-template-columns:1.25em 1.35em minmax(0,1fr) 2.3em 2.2em repeat(6,2.3em) 8em;column-gap:.6em}
+.p-table[data-l~="4"] .st{grid-template-columns:1.25em 1.35em minmax(0,1fr) 2.3em 2.2em repeat(6,2.3em) 6.6em;column-gap:.6em}
 .p-table[data-l~="4"] .st .gf,.p-table[data-l~="4"] .st .gs{display:block}
 .p-table[data-l~="4"] .st .fm{display:flex}
 
@@ -261,7 +276,6 @@ img{display:block}
   .status .lg{display:none}
   .panel{--ip:.8em}
 }
-@media (max-width:420px){ .brand h1 .yl{display:none} .brand h1 .ys{display:inline} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
@@ -269,14 +283,14 @@ img{display:block}
 
 <header class="top">
   <div class="brand">
-    <svg viewBox="0 0 642.858 637.143" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#fd9504" d="M305.493-34.205C240.9 1.45 193.598 47.583 191.566 121.153l-128.573-87.5c-23.684 22.836-97.6 157.312-15.712 245l-67.858 38.57 66.428 53.572-76.428 56.428 87.858 23.572-136.43 152.143 212.142-48.572.715 47.142 98.573-46.427-.715 47.142 45.715-37.142 23.57-2.143c33.409 17.738 64.241 42.994 110 37.143 48.909-6.254 59.982-36.676 77.142-62.858l-63.57-.715-48.572 28.573-4.285-29.286-29.287-1.43-7.856-27.857h-25.715l-2.857-17.855c-26.884 2.237-35.787-16.504-40-40.715 72.918-6.706 160.582 35.037 207.142 53.57l90.715-61.427-103.572-117.858-.713-125.713-86.43-66.43Zm-2.189 318.852c30.041-.34 61.074 12.81 78.975 47.576-6.132 6.912-81.123 49.471-143.57-23.57 15.494-14.182 39.704-23.725 64.595-24.006z" transform="translate(79.15 34.205)"/></svg>
-    <h1>Serie A<span><i class="yl">2026/2027</i><i class="ys">26/27</i></span></h1>
+    <span class="badge"><svg viewBox="0 0 642.858 637.143" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#fd9504" d="M305.493-34.205C240.9 1.45 193.598 47.583 191.566 121.153l-128.573-87.5c-23.684 22.836-97.6 157.312-15.712 245l-67.858 38.57 66.428 53.572-76.428 56.428 87.858 23.572-136.43 152.143 212.142-48.572.715 47.142 98.573-46.427-.715 47.142 45.715-37.142 23.57-2.143c33.409 17.738 64.241 42.994 110 37.143 48.909-6.254 59.982-36.676 77.142-62.858l-63.57-.715-48.572 28.573-4.285-29.286-29.287-1.43-7.856-27.857h-25.715l-2.857-17.855c-26.884 2.237-35.787-16.504-40-40.715 72.918-6.706 160.582 35.037 207.142 53.57l90.715-61.427-103.572-117.858-.713-125.713-86.43-66.43Zm-2.189 318.852c30.041-.34 61.074 12.81 78.975 47.576-6.132 6.912-81.123 49.471-143.57-23.57 15.494-14.182 39.704-23.725 64.595-24.006z" transform="translate(79.15 34.205)"/></svg></span>
+    <div class="bt"><h1>Serie A Roma<span class="sy"> 2026/27</span></h1><p><span class="py">2026/27</span><span class="pd">Live Dashboard</span></p></div>
   </div>
   <div class="status">
     <span id="livePill" hidden></span>
     <button type="button" id="stTxt" aria-live="polite">Caricamento…</button>
-    <button class="ib" id="refBtn" type="button" title="Aggiorna ora" aria-label="Aggiorna ora"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
-    <button class="ib" id="setBtn" type="button" title="Impostazioni" aria-label="Impostazioni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    <button class="ib" id="refBtn" type="button" title="Aggiorna ora" aria-label="Aggiorna ora"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/></svg></button>
+    <button class="ib" id="setBtn" type="button" title="Impostazioni" aria-label="Impostazioni"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/></svg></button>
   </div>
 </header>
 
@@ -740,7 +754,7 @@ function layout(){
   // larghezze minime (in em) con le sigle: classifica ≈ 11.5em (pos, sigla, Pt, G), partite ≈ 12.2em
   const ratio = window.innerWidth <= 480 ? .5 : .43;   // su telefono le righe hanno margine: testo più grande
   const fsMax = Math.max(9, Math.min(13.5, row * ratio, T.w / 11.5, M.w / 12.2));
-  dash.style.setProperty('--th', row.toFixed(2) + 'px');
+  dash.style.setProperty('--th', (row * .75).toFixed(2) + 'px');   // testata più bassa: titoli più vicini alle schede
   for (const p of Object.values(panels)) p.style.setProperty('--ph', (p.getBoundingClientRect().height - 2 - PAD) + 'px');
 
   const apply = fs => {
