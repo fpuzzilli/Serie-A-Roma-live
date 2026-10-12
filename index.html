@@ -115,11 +115,12 @@ img{display:block}
 .ttl .meta .rng{overflow:hidden;text-overflow:ellipsis;white-space:pre}
 .ttl .meta > span:not(.nav){display:flex;min-width:0}
 .nav{display:flex;gap:.3em;flex-shrink:0}
-.nb{background:var(--panel2);border:1px solid var(--edge);height:2.35em;min-width:2.35em;padding:0 .5em;border-radius:.45em;cursor:pointer;color:var(--dim);font-size:.95em;line-height:1;display:grid;place-items:center}
+.nb{background:var(--panel2);border:1px solid var(--edge);height:var(--h,2.23em);min-width:var(--h,2.23em);padding:0 .5em;border-radius:.45em;cursor:pointer;color:var(--dim);font-size:1em;line-height:1;display:grid;place-items:center}
 .nb:hover:not(:disabled){color:var(--txt);background:var(--line2)}
 .nb:disabled{opacity:.3;cursor:default}
-.nb svg{width:1.05em;height:1.05em}
-.ttl .meta .nav{margin-left:.9em;gap:.35em}
+.nb svg{width:1em;height:1em}
+/* pulsanti appoggiati alla linea di base del testo; più bassi se lo spazio sopra il titolo è poco */
+.ttl .meta .nav{--h:min(2.23em, calc(var(--th,30px) * .6 + var(--gap) * .45 - 3px));margin-left:.9em;gap:.35em;transform:translateY(calc(.27em - var(--h) / 2))}
 
 /* padding interno dei pannelli */
 .panel{--ip:1.05em}
