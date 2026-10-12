@@ -19,7 +19,7 @@
   --line:rgba(255,255,255,.06); --line2:rgba(255,255,255,.14);
   --txt:#EAEAEC; --dim:#A2A2A8; --mut:#66666D;
   --live:#3DDC84; --live-bg:rgba(61,220,132,.12);          /* etichette Live */
-  --now:#FFB020; --now-bg:rgba(255,176,32,.11);            /* righe delle partite in corso: arancio */
+  --now:#FFFFFF; --now-bg:rgba(255,255,255,.085);         /* partite in corso e punti in classifica: bianco */
   --prov:#FFB020; --prov-bg:rgba(255,176,32,.12);           /* classifica provvisoria */
   --roma:#C8102E; --roma-bg:rgba(255,255,255,.085);   /* righe della Roma: bianco, barra rossa */ --gold:#FD9504;
   --err:#FF6B6B;
@@ -148,7 +148,7 @@ img{display:block}
 /* pallino "in campo ora", subito dopo il nome */
 .ld{width:.42em;height:.42em;border-radius:50%;background:var(--prov);flex-shrink:0;animation:blink 1.4s ease infinite}
 .pt{text-align:center;font-weight:400;font-size:1.02em;color:var(--txt)}
-.st.lv .pt{color:var(--prov);animation:blink 1.4s ease infinite}
+.st.lv .pt{color:var(--now);animation:blink 1.4s ease infinite}
 .g,.v,.n,.p,.gf,.gs,.dr{text-align:center;color:var(--dim);font-size:.86em}
 .cr{width:1.3em;height:1.3em}
 .cr img{width:100%;height:100%;object-fit:contain;filter:grayscale(1) contrast(.55) brightness(1.7)}   /* stemmi monocromatici */
@@ -161,7 +161,7 @@ img{display:block}
 .st.roma .tn,.st.roma .pt{color:#fff;font-weight:600}
 .st.roma .cr img,.mt.roma .cr img{transform:scale(1.25)}
 .cr.rm img{transform:scale(1.5)!important}
-.st.roma.lv .pt{color:var(--prov)}
+.st.roma.lv .pt{color:var(--now)}
 
 .p-table[data-l~="2"] .st{grid-template-columns:1.2em 1.3em minmax(0,1fr) repeat(3,2.3em)}
 .p-table[data-l~="2"] .st .cr,.p-table[data-l~="2"] .st .dr{display:block}
@@ -192,10 +192,10 @@ img{display:block}
 .me{text-align:right;color:var(--mut);font-size:.8em;white-space:nowrap}
 .mt.live{background:var(--now-bg);box-shadow:inset var(--bar) 0 var(--now)}
 .mt.live .me{color:var(--now)}
-.mt.live .sc{color:var(--prov);font-weight:600;animation:blink 1.4s ease infinite}
+.mt.live .sc{color:var(--now);font-weight:600;animation:blink 1.4s ease infinite}
 .mt.roma{background:var(--roma-bg);box-shadow:inset var(--bar) 0 var(--roma)}
 .mt.roma .tn,.mt.roma .sc{color:#fff;font-weight:600}
-.mt.roma.live .sc{color:var(--prov)}
+.mt.roma.live .sc{color:var(--now)}
 .mt.empty{visibility:hidden}
 
 .p-match[data-m~="1"] .mt{grid-template-columns:3.6em minmax(0,1fr) 1.3em 3.5em 1.3em minmax(0,1fr) 3.6em}
