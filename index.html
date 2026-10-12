@@ -753,7 +753,7 @@ function layout(){
   // larghezze minime (in em) con le sigle: classifica ≈ 11.5em (pos, sigla, Pt, G), partite ≈ 12.2em
   const ratio = window.innerWidth <= 480 ? .5 : .43;   // su telefono le righe hanno margine: testo più grande
   const fsMax = Math.max(9, Math.min(13.5, row * ratio, T.w / 11.5, M.w / 12.2));
-  dash.style.setProperty('--th', row.toFixed(2) + 'px');
+  dash.style.setProperty('--th', (row * .75).toFixed(2) + 'px');   // testata più bassa: titoli più vicini alle schede
   for (const p of Object.values(panels)) p.style.setProperty('--ph', (p.getBoundingClientRect().height - 2 - PAD) + 'px');
 
   const apply = fs => {
