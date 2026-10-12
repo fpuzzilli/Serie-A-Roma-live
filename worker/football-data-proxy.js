@@ -17,6 +17,7 @@
 
 const UPSTREAM = 'https://api.football-data.org';
 const ALLOWED_PATH = /^\/v4\/competitions\/SA\/(matches|standings)$/;
+const VERSION = '2026-10-12';   // mostrata su /, utile per verificare che l'ultima versione sia online
 const CACHE_SECONDS = 30; // più visitatori nello stesso mezzo minuto = una sola richiesta a football-data.org
 
 export default {
@@ -41,10 +42,12 @@ export default {
 
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
     if (request.method !== 'GET') return reply(405, 'Metodo non consentito');
+
+    const url = new URL(request.url);
+    if (url.pathname === '/') return reply(200, 'Serie A Roma Live, Worker attivo (versione ' + VERSION + ')');
     if (!okOrigin) return reply(403, 'Sito non autorizzato: aggiungilo in ALLOWED_ORIGINS');
     if (!env.FD_TOKEN) return reply(500, 'Manca il secret FD_TOKEN nelle impostazioni del Worker');
 
-    const url = new URL(request.url);
     if (!ALLOWED_PATH.test(url.pathname)) return reply(404, 'Percorso non consentito');
 
     // unico parametro ammesso: matchday (numero)
