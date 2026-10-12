@@ -120,7 +120,7 @@ img{display:block}
 /* ── CLASSIFICA ──
    celle: pos | stemma | squadra | Pt | G | V | N | P | GF | GS | DR | ultime 5 */
 .st{display:grid;grid-template-rows:minmax(0,1fr);align-items:center;column-gap:.6em;padding:0 var(--ip);border-top:1px solid var(--line);
-    grid-template-columns:1.6em minmax(0,1fr) 1.7em 2em}
+    grid-template-columns:1.2em minmax(0,1fr) 1.7em 2em}
 .st > *{min-width:0;align-self:center}
 .st .cr,.st .v,.st .n,.st .p,.st .gf,.st .gs,.st .dr,.st .fm{display:none}
 .rows > .st:first-child,.rows > .mt:first-child{border-top-color:transparent}
@@ -155,12 +155,12 @@ img{display:block}
 .cr.rm img{transform:scale(1.5)!important}
 .st.roma.lv .pt{color:var(--prov)}
 
-.p-table[data-l~="2"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.3em 2.1em 2.3em}
+.p-table[data-l~="2"] .st{grid-template-columns:1.2em 1.3em minmax(0,1fr) 2.3em 2.1em 2.3em}
 .p-table[data-l~="2"] .st .cr,.p-table[data-l~="2"] .st .dr{display:block}
 .p-table[data-l~="2"] .st.th .cr{display:none}
-.p-table[data-l~="3"] .st{grid-template-columns:1.6em 1.3em minmax(0,1fr) 2.3em 2.1em repeat(4,2.3em)}
+.p-table[data-l~="3"] .st{grid-template-columns:1.2em 1.3em minmax(0,1fr) 2.3em 2.1em repeat(4,2.3em)}
 .p-table[data-l~="3"] .st .v,.p-table[data-l~="3"] .st .n,.p-table[data-l~="3"] .st .p{display:block}
-.p-table[data-l~="4"] .st{grid-template-columns:1.7em 1.35em minmax(0,1fr) 2.3em 2.2em repeat(6,2.3em) 8em;column-gap:.6em}
+.p-table[data-l~="4"] .st{grid-template-columns:1.25em 1.35em minmax(0,1fr) 2.3em 2.2em repeat(6,2.3em) 8em;column-gap:.6em}
 .p-table[data-l~="4"] .st .gf,.p-table[data-l~="4"] .st .gs{display:block}
 .p-table[data-l~="4"] .st .fm{display:flex}
 
@@ -250,8 +250,8 @@ img{display:block}
 @media (max-width:480px){
   .dash{--cols:minmax(0,1fr) minmax(0,1fr)}
   /* posizioni: numeri più piccoli, colonna più stretta */
-  .st{grid-template-columns:1.15em minmax(0,1fr) 1.7em 2em;column-gap:.5em}
-  .pos{font-size:.74em}
+  .st{grid-template-columns:1em minmax(0,1fr) 1.7em 2em;column-gap:.5em}
+  .pos{font-size:.68em}
   .ko{line-height:.98}
   .mt{grid-template-columns:minmax(0,1fr) 2.65em minmax(0,1fr);column-gap:.4em}
   .p-match .card{--ip:.6em}
