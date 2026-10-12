@@ -49,18 +49,16 @@ img{display:block}
 
 /* ── TESTATA ── */
 .top{max-width:1440px;margin:0 auto;height:var(--hdr);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 var(--pad);font-size:calc(var(--hdr)*.32)}
-/* marchio: lupo grande e due righe di testo (titolo + sottotitolo) */
-.brand{display:flex;align-items:center;gap:.7em;min-width:0}
-.brand svg{height:calc(var(--hdr)*.72);width:auto;flex-shrink:0}
-.bt{display:flex;flex-direction:column;justify-content:center;gap:.22em;min-width:0}
-.brand h1{font-size:1.12em;font-weight:600;letter-spacing:-.015em;white-space:nowrap;line-height:1.05;color:var(--txt)}
-.brand p{font-size:.8em;font-weight:400;color:#6E7380;white-space:nowrap;line-height:1.05}
+/* marchio come nella prima versione: lupo in un riquadro da 36px, titolo 15px, sottotitolo 11px */
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand .badge{width:36px;height:36px;padding:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand svg{width:100%;height:100%}
+.bt{display:flex;flex-direction:column;min-width:0}
+.brand h1{font-size:15px;font-weight:600;letter-spacing:-.3px;white-space:nowrap;line-height:1.25;color:var(--txt)}
+.brand p{font-size:11px;font-weight:400;color:#5A6478;white-space:nowrap;margin-top:1px;line-height:1.25}
 .brand p .py{display:none}
 /* telefono: la stagione scende nel sottotitolo; sui più stretti resta solo la stagione */
 @media (max-width:480px){
-  .brand{gap:.55em}
-  .brand svg{height:calc(var(--hdr)*.64)}
-  .brand h1{font-size:1em}
   .brand h1 .sy{display:none}
   .brand p .py{display:inline}
   .brand p .pd{display:none}
@@ -284,7 +282,7 @@ img{display:block}
 
 <header class="top">
   <div class="brand">
-    <svg viewBox="0 0 642.858 637.143" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#fd9504" d="M305.493-34.205C240.9 1.45 193.598 47.583 191.566 121.153l-128.573-87.5c-23.684 22.836-97.6 157.312-15.712 245l-67.858 38.57 66.428 53.572-76.428 56.428 87.858 23.572-136.43 152.143 212.142-48.572.715 47.142 98.573-46.427-.715 47.142 45.715-37.142 23.57-2.143c33.409 17.738 64.241 42.994 110 37.143 48.909-6.254 59.982-36.676 77.142-62.858l-63.57-.715-48.572 28.573-4.285-29.286-29.287-1.43-7.856-27.857h-25.715l-2.857-17.855c-26.884 2.237-35.787-16.504-40-40.715 72.918-6.706 160.582 35.037 207.142 53.57l90.715-61.427-103.572-117.858-.713-125.713-86.43-66.43Zm-2.189 318.852c30.041-.34 61.074 12.81 78.975 47.576-6.132 6.912-81.123 49.471-143.57-23.57 15.494-14.182 39.704-23.725 64.595-24.006z" transform="translate(79.15 34.205)"/></svg>
+    <span class="badge"><svg viewBox="0 0 642.858 637.143" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#fd9504" d="M305.493-34.205C240.9 1.45 193.598 47.583 191.566 121.153l-128.573-87.5c-23.684 22.836-97.6 157.312-15.712 245l-67.858 38.57 66.428 53.572-76.428 56.428 87.858 23.572-136.43 152.143 212.142-48.572.715 47.142 98.573-46.427-.715 47.142 45.715-37.142 23.57-2.143c33.409 17.738 64.241 42.994 110 37.143 48.909-6.254 59.982-36.676 77.142-62.858l-63.57-.715-48.572 28.573-4.285-29.286-29.287-1.43-7.856-27.857h-25.715l-2.857-17.855c-26.884 2.237-35.787-16.504-40-40.715 72.918-6.706 160.582 35.037 207.142 53.57l90.715-61.427-103.572-117.858-.713-125.713-86.43-66.43Zm-2.189 318.852c30.041-.34 61.074 12.81 78.975 47.576-6.132 6.912-81.123 49.471-143.57-23.57 15.494-14.182 39.704-23.725 64.595-24.006z" transform="translate(79.15 34.205)"/></svg></span>
     <div class="bt"><h1>Serie A Roma<span class="sy"> 2026/27</span></h1><p><span class="py">2026/27</span><span class="pd">Live Dashboard</span></p></div>
   </div>
   <div class="status">
