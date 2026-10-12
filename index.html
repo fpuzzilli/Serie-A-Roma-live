@@ -70,7 +70,7 @@ img{display:block}
   #livePill::before{width:8px;height:8px}
 }
 .status{display:flex;align-items:center;gap:1em;flex-shrink:0;line-height:1}
-#stTxt{background:none;border:0;color:var(--dim);white-space:nowrap;font-size:.7em;font-weight:700;display:inline-flex;align-items:center;gap:.4em;cursor:default;padding:0}
+#stTxt{background:none;border:0;color:var(--dim);white-space:nowrap;font-size:.7em;font-weight:400;display:inline-flex;align-items:center;gap:.4em;cursor:default;padding:0}
 #stTxt.err{color:var(--err);cursor:pointer}
 #stTxt svg{width:1.05em;height:1.05em;flex-shrink:0}
 #refBtn.busy svg{animation:spin .9s linear infinite}
@@ -114,7 +114,10 @@ img{display:block}
 .ttl .meta .rng{overflow:hidden;text-overflow:ellipsis;white-space:pre}
 .ttl .meta > span:not(.nav){display:flex;min-width:0}
 /* controlli del carosello: solo icone, come quelle della testata, centrate sul testo; area cliccabile più grande dell'icona */
-.nav{display:flex;align-items:center;flex-shrink:0;margin-left:1.1em;gap:1em}
+/* il numero della giornata sta tra le frecce nel codice: su desktop va prima delle frecce, su telefono resta in mezzo */
+.nav{display:flex;align-items:center;min-width:0;gap:1em}
+#nxtMeta{order:-1;display:flex;min-width:0;margin-right:.6em}
+.nb{flex-shrink:0}
 .nb{position:relative;background:none;border:0;padding:0;width:1.25em;height:1.25em;cursor:pointer;color:var(--dim);display:grid;place-items:center}
 .nb::before{content:"";position:absolute;inset:-.55em -.5em;border-radius:.45em}
 .nb:hover:not(:disabled){color:var(--txt)}
@@ -270,7 +273,8 @@ img{display:block}
   .ko .kd{margin-bottom:.22em}
   .ko .kd,.ko .kt{font-size:.74em}   /* data e orario uguali quando sono uno sopra l'altro */
   /* frecce del carosello: più distanziate e con area di tocco ampia */
-  .nav{gap:24px;margin-left:16px}
+  .nav{gap:24px}
+  #nxtMeta{order:0;margin-right:0;flex-shrink:0}
   .nb::before{inset:-12px -11px}
   .status .lg{display:none}
   .panel{--ip:.8em}
@@ -315,10 +319,10 @@ img{display:block}
     <div class="ttl">
       <h2><span id="nxtTitle">Prossime<span class="wide"> giornate</span></span></h2>
       <div class="meta">
-        <span id="nxtMeta"></span>
         <span class="nav">
           <button class="nb" id="homeMd" type="button" title="Torna alla prossima giornata" aria-label="Torna alla prossima giornata" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
           <button class="nb" id="prevMd" type="button" aria-label="Giornata precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+          <span id="nxtMeta"></span>
           <button class="nb" id="nextMd" type="button" aria-label="Giornata successiva"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
         </span>
       </div>
