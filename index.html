@@ -290,6 +290,10 @@ html.widget #curMeta,html.widget #stTxt .lg{display:none}
 html.widget #curPanel .ttl{justify-content:space-between}
 html.widget #stTxt{font-size:1em;font-weight:400}
 html.widget .mt .ko .kd{display:block}   /* righe alte: data sempre sopra l'orario */
+/* righe alte: data e orario più grandi, colonna centrale più larga per lasciare aria ai nomi */
+html.widget .mt{grid-template-columns:minmax(0,1fr) 3.6em minmax(0,1fr);column-gap:.6em}
+html.widget .ko .kd,html.widget .ko .kt{font-size:.86em}
+html.widget .ko .kd{margin-bottom:.15em}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
