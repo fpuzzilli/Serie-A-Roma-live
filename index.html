@@ -281,7 +281,9 @@ img{display:block}
 }
 /* ── WIDGET (indirizzo con ?widget): tutto lo schermo a classifica e giornata in corso, senza testata ── */
 html.widget .top,html.widget #nxtPanel,html.widget #refBtn,html.widget #setBtn{display:none}
-html.widget .dash{--pad:6px;padding-top:4px;height:100dvh;min-height:0;max-width:none;grid-template-rows:minmax(0,1fr);--cols:minmax(0,1fr) minmax(0,1fr)}
+/* l'app del widget apre la pagina alta come uno schermo intero e ne mostra solo la parte in alto:
+   l'altezza segue la larghezza con le proporzioni del widget grande (circa 1 : 1,05); margini laterali per gli angoli arrotondati */
+html.widget .dash{--pad:6px;padding:4px 10px 8px;height:calc(100vw * 1.048);min-height:0;max-width:none;grid-template-rows:minmax(0,1fr);--cols:minmax(0,1fr) minmax(0,1fr)}
 html.widget .p-table{grid-row:1}
 html.widget #curMeta,html.widget #stTxt .lg{display:none}
 html.widget #curPanel .ttl{justify-content:space-between}
