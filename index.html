@@ -279,6 +279,14 @@ img{display:block}
   .status .lg{display:none}
   .panel{--ip:.8em}
 }
+/* ── WIDGET (indirizzo con ?widget): tutto lo schermo a classifica e giornata in corso, senza testata ── */
+html.widget .top,html.widget #nxtPanel,html.widget #refBtn,html.widget #setBtn{display:none}
+html.widget .dash{--pad:6px;padding-top:4px;height:100dvh;min-height:0;max-width:none;grid-template-rows:minmax(0,1fr);--cols:minmax(0,1fr) minmax(0,1fr)}
+html.widget .p-table{grid-row:1}
+html.widget #curMeta,html.widget #stTxt .lg{display:none}
+html.widget #curPanel .ttl{justify-content:space-between}
+html.widget #stTxt{font-size:1em;font-weight:400}
+html.widget .mt .ko .kd{display:block}   /* righe alte: data sempre sopra l'orario */
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
@@ -364,6 +372,8 @@ img{display:block}
 
 <script>
 'use strict';
+const WIDGET = new URLSearchParams(location.search).has('widget');
+if (WIDGET) document.documentElement.classList.add('widget');
 /* ══════════════════════════════════════════════════════════════════════
    CONFIGURAZIONE
    football-data.org blocca le chiamate dal browser: i dati passano dal
@@ -385,6 +395,8 @@ const store = {
 };
 store.del('sa_fd_token');   // versioni precedenti salvavano il token nel browser
 const $ = id => document.getElementById(id);
+// widget: l'orario dell'ultimo aggiornamento va nel titolo della giornata in corso
+if (WIDGET) document.querySelector('#curPanel .ttl').append($('stTxt'));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const DAYS = ['dom','lun','mar','mer','gio','ven','sab'];
 const MONTHS = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
@@ -723,6 +735,7 @@ function renderMatchdays(dir = 0){
   const cArr = (S.cur && g.get(S.cur)) || [];
   const live = cArr.some(m => isLive(view(m)));
   $('curPill').innerHTML = live ? '<span class="pill live">Live</span>' : '';
+  if (WIDGET) $('curTitle').textContent = S.cur ? S.cur + 'ª giornata' : 'Giornata in corso';
   $('curMeta').innerHTML = S.cur ? `<span><span class="mdn">${S.cur}ª</span><span class="rng"> giornata · ${esc(rangeLabel(cArr))}</span></span>` : '';
   $('curRows').innerHTML = cArr.length ? matchRows(cArr) : '<div class="msg"><p>Nessuna giornata disponibile.</p></div>';
 
