@@ -286,6 +286,9 @@ html.widget .top,html.widget #nxtPanel,html.widget #refBtn,html.widget #setBtn{d
    margini interni ampi per gli angoli arrotondati */
 html.widget .dash{--pad:6px;--gap:8px;padding:8px 22px 14px;height:calc((100vw - 24px) * 1.055);min-height:0;max-width:none;grid-template-rows:minmax(0,1fr);--cols:minmax(0,1fr) minmax(0,1fr)}
 html.widget .p-table{grid-row:1}
+.full{display:none}
+html.widget .full{display:block;width:max-content;margin:24px auto 40px;padding:12px 22px;border-radius:10px;background:var(--panel2);border:1px solid var(--line2);color:var(--txt);font-size:15px;font-weight:500;text-decoration:none}
+html.widget .full:active{background:var(--line2)}
 html.widget #curMeta,html.widget #stTxt .lg{display:none}
 html.widget #curPanel .ttl{justify-content:space-between}
 html.widget #stTxt{font-size:1em;font-weight:400}
@@ -347,6 +350,9 @@ html.widget .ko .kd{margin-bottom:.15em}
     <div class="card"><div class="rows" id="nxtRows" aria-live="polite"></div></div>
   </section>
 </main>
+
+<!-- solo nel widget: sotto la parte visibile, per passare alla pagina normale quando il widget apre il browser -->
+<a class="full" id="fullLink" href="./">Versione completa</a>
 
 <div class="tip" id="tip" role="status" hidden></div>
 
